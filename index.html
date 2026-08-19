@@ -1,32 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-
-<style>body { display: none; }</style>
-
-    <script>
-        // Mật khẩu của bạn (có thể đổi số '123456' thành chữ tùy ý)
-        const SECRET_PASSWORD = "tng8984188"; 
-
-        // Kiểm tra xem đã đăng nhập chưa
-        if (sessionStorage.getItem("isLoggedIn") === "true") {
-            // Nếu đúng rồi thì hiển thị lại trang web bình thường
-            document.write("<style>body { display: block !important; }</style>");
-        } else {
-            let userInput = prompt("🔒 Nhập mật khẩu để truy cập Tool YouTube:");
-            
-            if (userInput === SECRET_PASSWORD) {
-                // Nhập đúng: lưu lại trạng thái và mở web
-                sessionStorage.setItem("isLoggedIn", "true");
-                location.reload(); // Tải lại trang để hiện giao diện
-            } else {
-                // Nhập sai: giữ nguyên trạng thái khóa và báo lỗi
-                document.write("<div style='background:#0f172a; height:100vh; display:flex; justify-content:center; align-items:center; color:red; font-family:sans-serif; font-size:20px; font-weight:bold;'>⛔ Sai mật khẩu! Bạn không có quyền truy cập trang web này.</div>");
-                throw new Error("Unauthorized");
-            }
-        }
-    </script>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YOUTUBE NICHE RESEARCH PRO - TRUNG TÍN - AI</title>
