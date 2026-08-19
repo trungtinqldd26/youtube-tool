@@ -2,17 +2,26 @@
 <html lang="vi">
 <head>
 
-<script>
-        // Đặt mật khẩu của bạn ở đây
-        const SECRET_PASSWORD = "ttng8984188@2023"; 
+<style>body { display: none; }</style>
 
-        if (sessionStorage.getItem("isLoggedIn") !== "true") {
-            let userInput = prompt("🔒 Vui lòng nhập mật khẩu để truy cập Tool YouTube:");
+    <script>
+        // Mật khẩu của bạn (có thể đổi số '123456' thành chữ tùy ý)
+        const SECRET_PASSWORD = "tng8984188"; 
+
+        // Kiểm tra xem đã đăng nhập chưa
+        if (sessionStorage.getItem("isLoggedIn") === "true") {
+            // Nếu đúng rồi thì hiển thị lại trang web bình thường
+            document.write("<style>body { display: block !important; }</style>");
+        } else {
+            let userInput = prompt("🔒 Nhập mật khẩu để truy cập Tool YouTube:");
             
             if (userInput === SECRET_PASSWORD) {
+                // Nhập đúng: lưu lại trạng thái và mở web
                 sessionStorage.setItem("isLoggedIn", "true");
+                location.reload(); // Tải lại trang để hiện giao diện
             } else {
-                document.write("<h2 style='text-align:center; margin-top:20vh; font-family:sans-serif; color:red;'>⛔ Sai mật khẩu! Bạn không có quyền truy cập trang web này.</h2>");
+                // Nhập sai: giữ nguyên trạng thái khóa và báo lỗi
+                document.write("<div style='background:#0f172a; height:100vh; display:flex; justify-content:center; align-items:center; color:red; font-family:sans-serif; font-size:20px; font-weight:bold;'>⛔ Sai mật khẩu! Bạn không có quyền truy cập trang web này.</div>");
                 throw new Error("Unauthorized");
             }
         }
