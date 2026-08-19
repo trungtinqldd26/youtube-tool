@@ -3,33 +3,15 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Mật khẩu của bạn
 const CORRECT_PASSWORD = "ttng8984188"; 
 
+// Middleware để đọc dữ liệu từ form gửi lên
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Giao diện khung đăng nhập (dùng form method="POST")
 app.get('/', (req, res) => {
-    const userPass = req.query.pass;
-
-    if (userPass === CORRECT_PASSWORD) {
-        return res.sendFile(path.join(__dirname, 'index.html'));
-    }
-
-    if (userPass !== undefined && userPass !== CORRECT_PASSWORD) {
-        return res.send(`
-            <!DOCTYPE html>
-            <html lang="vi">
-            <head><meta charset="UTF-8"><title>Sai Mật Khẩu</title></head>
-            <body style="background: #0f172a; color: red; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-size: 20px;">
-                <div style="text-align: center;">
-                    <p>⛔ Sai mật khẩu! Bạn không có quyền truy cập.</p>
-                    <a href="/" style="color: #3b82f6; text-decoration: none; font-size: 16px;">&larr; Quay lại đăng nhập</a>
-                </div>
-            </body>
-            </html>
-        `);
-    }
-
     res.send(`
         <!DOCTYPE html>
         <html lang="vi">
@@ -49,7 +31,7 @@ app.get('/', (req, res) => {
         <body>
             <div class="card">
                 <h2>🔒 Đăng Nhập Tool</h2>
-                <form action="/" method="GET">
+                <form action="/login" method="POST">
                     <input type="password" name="pass" placeholder="Nhập mật khẩu..." required autofocus>
                     <button type="submit">Truy Cập</button>
                 </form>
@@ -57,6 +39,30 @@ app.get('/', (req, res) => {
         </body>
         </html>
     `);
+});
+
+// Xử lý kiểm tra mật khẩu ngầm qua POST
+app.post('/login', (req, res) => {
+    const userPass = req.body.pass ? req.body.pass.trim() : "";
+
+    if (userPass === CORRECT_PASSWORD) {
+        // Đúng mật khẩu -> Trả file index.html, thanh URL hoàn toàn sạch sẽ
+        return res.sendFile(path.join(__dirname, 'index.html'));
+    } else {
+        // Sai mật khẩu -> Báo lỗi và quay lại trang đăng nhập
+        return res.send(`
+            <!DOCTYPE html>
+            <html lang="vi">
+            <head><meta charset="UTF-8"><title>Sai Mật Khẩu</title></head>
+            <body style="background: #0f172a; color: red; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-size: 20px;">
+                <div style="text-align: center;">
+                    <p>⛔ Sai mật khẩu! Bạn không có quyền truy cập.</p>
+                    <a href="/" style="color: #3b82f6; text-decoration: none; font-size: 16px;">&larr; Quay lại đăng nhập</a>
+                </div>
+            </body>
+            </html>
+        `);
+    }
 });
 
 app.listen(PORT, () => {
