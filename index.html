@@ -12,7 +12,7 @@
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 
-  <!-- Babel for JSX -->
+  <!-- Babel Standalone for JSX -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <!-- Google Fonts Inter -->
@@ -28,6 +28,9 @@
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    
+    .w-72.custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+    .w-72.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
 
     input.no-spinner::-webkit-outer-spin-button,
     input.no-spinner::-webkit-inner-spin-button {
@@ -38,8 +41,8 @@
       -moz-appearance: textfield;
     }
 
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade-in { animation: fadeIn 0.25s ease-out forwards; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased">
@@ -48,6 +51,7 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
+    // SVG Icons Definition
     const Search = ({ className = "w-4 h-4", ...p }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...p}><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>;
     const Play = ({ className = "w-4 h-4", fill = "none", ...p }) => <svg viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...p}><polygon points="6 3 20 12 6 21 6 3"/></svg>;
     const Settings = ({ className = "w-4 h-4", ...p }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...p}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>;
@@ -79,6 +83,24 @@
     const Image = ({ className = "w-4 h-4", ...p }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...p}><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>;
     const Lock = ({ className = "w-4 h-4", ...p }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...p}><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>;
     const Crown = ({ className = "w-4 h-4", ...p }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...p}><polygon points="2 4 11 9 12 2 13 9 22 4 20 22 4 22 2 4"/></svg>;
+    const Download = ({ className = "w-4 h-4", ...p }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>;
+    const History = ({ className = "w-4 h-4", ...p }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...p}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>;
+    const HelpCircle = ({ className = "w-4 h-4", ...p }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...p}><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>;
+
+    // API Keys Default Configs
+    const DEFAULT_YOUTUBE_KEYS = [
+      "AIzaSyDWDw5ssdhESFUhlpJUAznrGmGNw4Uk2U4",
+      "AIzaSyAKRZoOQlM2t9VDTWO5XWHBRM-ihdgcG0A",
+      "AIzaSyA7PKEqOHIRVYELLYjDkircCxXLss2YJ1o",
+      "AIzaSyCPXy-DVyFXc2gdIiAAD38U82v3xy9lQXQ"
+    ];
+
+    const DEFAULT_GEMINI_KEYS = [
+      "AQ.Ab8RN6KDhwHfckMbIGQ0PkhopetIaIbdmnFfMWTpJy3sjfFBHw",
+      "AQ.Ab8RN6K3ThEVRpaM5BzNDXa6FVW_f43OLQLHs430k1AzmB04RQ",
+      "AQ.Ab8RN6J7-pt9-ShpuDzvNvmK_MRNzw3-P9NEGbMxdflycPXDJQ",
+      "AQ.Ab8RN6LRF5IHCb0n6DnBQkVgY3IT10MOLwiQUzbxeJPwhtktFw"
+    ];
 
     const MY_BANK = {
       BANK_ID: "970422", 
@@ -115,6 +137,55 @@
       { code: 'IT', name: '🇮🇹 Ý' },
     ];
 
+    const COUNTRY_NAME_MAP = {
+      'VN': 'Việt Nam',
+      'US': 'Hoa Kỳ',
+      'IN': 'Ấn Độ',
+      'CA': 'Canada',
+      'ID': 'Indonesia',
+      'GB': 'Vương Quốc Anh',
+      'AU': 'Úc',
+      'JP': 'Nhật Bản',
+      'KR': 'Hàn Quốc',
+      'DE': 'Đức',
+      'FR': 'Pháp',
+      'BR': 'Brazil',
+      'MX': 'Mexico'
+    };
+
+    // Dynamic Topic Classification Map
+    const MAP_YOUTUBE_TOPICS = {
+      'Gaming': 'Trò chơi / Game',
+      'Music': 'Âm nhạc',
+      'Entertainment': 'Giải trí',
+      'Technology': 'Công nghệ & AI',
+      'Lifestyle': 'Lối sống & Vlog',
+      'Education': 'Giáo dục',
+      'Sports': 'Thể thao',
+      'Film': 'Phim & Điện ảnh',
+      'News': 'Tin tức & Xã hội',
+      'Fashion': 'Thời trang & Làm đẹp',
+      'Food': 'Ẩm thực & Nấu ăn',
+      'Travel': 'Du lịch & Khám phá',
+      'Science': 'Khoa học & Kỹ thuật',
+      'Pets': 'Thú cưng & Động vật'
+    };
+
+    const parseTopicCategory = (categories) => {
+      if (!categories || categories.length === 0) return 'Chủ đề Tổng hợp';
+      for (let catUrl of categories) {
+        const parts = catUrl.split('/');
+        const key = parts[parts.length - 1];
+        if (MAP_YOUTUBE_TOPICS[key]) return MAP_YOUTUBE_TOPICS[key];
+        for (let tKey in MAP_YOUTUBE_TOPICS) {
+          if (catUrl.toLowerCase().includes(tKey.toLowerCase())) {
+            return MAP_YOUTUBE_TOPICS[tKey];
+          }
+        }
+      }
+      return 'Tổng hợp';
+    };
+
     const calculateVPH = (viewCount, publishedAt) => {
       if (!viewCount || !publishedAt) return 0;
       const hours = Math.max(1, (new Date() - new Date(publishedAt)) / (1000 * 60 * 60));
@@ -129,9 +200,38 @@
       return Math.floor(30 + (Math.random() * 20));
     };
 
-    const formatLocale = (num) => {
-      return Number(num || 0).toLocaleString('vi-VN');
+    // Dynamic Outlier Score calculation (Flexibly evaluates viral ratios, sub counts & content efficiency)
+    const calculateOutlierScore = (views, subs, videos, ageDays) => {
+      const rawSubs = Math.max(1, subs);
+      const rawViews = Math.max(0, views);
+      const viralRatio = rawViews / rawSubs;
+
+      // 1. Viral Ratio Score (Max 6.5 pts)
+      let viralScore = 2.0;
+      if (viralRatio >= 300) viralScore = 6.5;
+      else if (viralRatio >= 100) viralScore = 5.8;
+      else if (viralRatio >= 50) viralScore = 5.0;
+      else if (viralRatio >= 10) viralScore = 4.0;
+      else if (viralRatio >= 2) viralScore = 3.0;
+
+      // 2. Relative Scale Agility Bonus (Max 2.0 pts)
+      let scaleBonus = 0.5;
+      if (rawSubs <= 10000) scaleBonus = 2.0;
+      else if (rawSubs <= 50000) scaleBonus = 1.6;
+      else if (rawSubs <= 200000) scaleBonus = 1.2;
+      else if (rawSubs <= 1000000) scaleBonus = 0.8;
+
+      // 3. Efficiency Bonus (Views per Video, Max 1.5 pts)
+      const avgViewsPerVideo = rawViews / Math.max(1, videos);
+      let efficiencyBonus = 0.5;
+      if (avgViewsPerVideo >= 100000) efficiencyBonus = 1.5;
+      else if (avgViewsPerVideo >= 20000) efficiencyBonus = 1.0;
+
+      const totalScore = viralScore + scaleBonus + efficiencyBonus;
+      return Math.min(9.8, Math.max(3.5, totalScore)).toFixed(1);
     };
+
+    const formatLocale = (num) => Number(num || 0).toLocaleString('vi-VN');
 
     const getTimeFilterDate = (filterType) => {
       const d = new Date();
@@ -149,6 +249,27 @@
       if (!publishedAt) return 1;
       const days = Math.floor((new Date() - new Date(publishedAt)) / (1000 * 60 * 60 * 24));
       return Math.max(1, days);
+    };
+
+    // Clean title and extract readable sub-niche without hashtags/gibberish
+    const extractSubNicheFromTitle = (title, searchKw) => {
+      if (!title) return searchKw;
+      let cleanTitle = title
+        .replace(/#[^\s#<>]+/g, '')
+        .replace(/(https?:\/\/[^\s]+)/g, '')
+        .replace(/[\(\)\[\]\{\}\_\-\|\:\!\?\•\“\”\"\'\d\=\+\*\&\^\%\$\@]/g, ' ')
+        .replace(/[^\p{L}\p{N}\s]/gu, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      const words = cleanTitle.split(' ').filter(w => w.length > 1);
+      if (words.length <= 2) return searchKw;
+
+      const validWords = words.filter(w => !/^(.)\1+$/i.test(w));
+      if (validWords.length === 0) return searchKw;
+
+      const resultPhrase = validWords.slice(0, 5).join(' ');
+      return resultPhrase.charAt(0).toUpperCase() + resultPhrase.slice(1).toLowerCase();
     };
 
     const fallbackCopyTextToClipboard = (text) => {
@@ -169,7 +290,17 @@
       document.body.removeChild(textArea);
     };
 
-    const Header = ({ onOpenSettings, onOpenUpgrade, userPlan, freeSearchesLeft, activeYtKeyCount, activeGeminiKeyCount }) => (
+    const downloadTxtFile = (filename, content) => {
+      const element = document.createElement("a");
+      const file = new Blob([content], {type: 'text/plain;charset=utf-8'});
+      element.href = URL.createObjectURL(file);
+      element.download = filename;
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    };
+
+    const Header = ({ onOpenSettings, onOpenUpgrade, onOpenHistory, userPlan, freeSearchesLeft, activeYtKeyCount, activeGeminiKeyCount }) => (
       <div className="bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between shadow-sm z-10 relative">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden border border-blue-200 shadow-inner">
@@ -178,52 +309,104 @@
           <h1 className="font-bold text-gray-800 text-[15px] tracking-wide">YOUTUBE NICHE RESEARCH PRO - TRUNG TÍN - AI</h1>
         </div>
         
-        <div className="flex items-center space-x-3 text-xs font-semibold">
-          {userPlan === 'FREE' && (
-            <div className="bg-orange-50 text-orange-700 border border-orange-200 px-3 py-1.5 rounded-md flex items-center">
-              <span>Lượt dùng thử: <strong className="text-orange-600 ml-1">{freeSearchesLeft}/3</strong></span>
-            </div>
-          )}
-          <button className="flex items-center text-orange-600 border border-orange-200 hover:bg-orange-50 px-3 py-1.5 rounded transition-colors">
-            <Video className="w-4 h-4 mr-1" /> VIDEO HƯỚNG DẪN
+        <div className="flex items-center space-x-2 text-xs font-semibold">
+          <a href="https://youtube.com" target="_blank" rel="noreferrer" className="flex items-center border border-gray-300 hover:bg-gray-50 text-gray-700 px-2.5 py-1.5 rounded transition-colors">
+            <Play className="w-3.5 h-3.5 mr-1 text-red-600 fill-current" /> VIDEO HƯỚNG DẪN
+          </a>
+          <button onClick={() => alert("Hỗ trợ kỹ thuật: Zalo / Telegram 0987.654.321")} className="flex items-center border border-gray-300 hover:bg-gray-50 text-gray-700 px-2.5 py-1.5 rounded transition-colors">
+            <HelpCircle className="w-3.5 h-3.5 mr-1 text-blue-500" /> HỖ TRỢ
           </button>
-          <button onClick={onOpenSettings} className="flex items-center text-blue-600 border border-blue-200 hover:bg-blue-50 px-3 py-1.5 rounded transition-colors">
-            <Settings className="w-4 h-4 mr-1" /> CÀI ĐẶT API ({activeYtKeyCount} YT / {activeGeminiKeyCount} AI)
-          </button>
-          <div className="flex items-center bg-blue-50 text-blue-700 px-3 py-1.5 rounded border border-blue-100 hidden md:flex">
+          
+          <div className="flex items-center bg-blue-50 text-blue-700 px-3 py-1.5 rounded border border-blue-100 hidden lg:flex">
             <div className="w-4 h-4 bg-blue-600 rounded-full text-white flex items-center justify-center text-[10px] mr-2">T</div>
-            trungtinsuno@gmail.com
+            trungtinsuno@gmail.com <span className="ml-1 text-[10px] bg-yellow-400 text-gray-900 font-bold px-1 rounded">TRIAL</span>
           </div>
-          <button onClick={onOpenUpgrade} className={`flex items-center text-white px-4 py-1.5 rounded transition-colors shadow-md ${userPlan === 'FREE' ? 'bg-orange-500 hover:bg-orange-600 animate-pulse' : 'bg-green-600'}`}>
+
+          <button onClick={() => window.location.reload()} className="flex items-center border border-gray-300 hover:bg-gray-100 px-2.5 py-1.5 rounded transition-colors text-gray-700">
+            <RefreshCw className="w-3.5 h-3.5 mr-1 text-gray-600" /> LÀM MỚI
+          </button>
+
+          <button onClick={onOpenUpgrade} className={`flex items-center text-white px-3.5 py-1.5 rounded transition-colors shadow-md ${userPlan === 'FREE' ? 'bg-orange-500 hover:bg-orange-600 animate-pulse' : 'bg-green-600'}`}>
             <Crown className={`w-4 h-4 mr-1 ${userPlan === 'FREE' ? 'text-yellow-200' : 'text-yellow-400'}`} /> {userPlan === 'FREE' ? 'NÂNG CẤP GÓI' : `GÓI ${userPlan}`}
           </button>
         </div>
       </div>
     );
 
-    const TabFindChannels = ({ showToast, callYouTubeApi, ytKeysCount, onOpenSettings, onSpyChannel, onCheckVideo, userPlan, onOpenUpgrade, freeSearchesLeft, useFreeSearch }) => {
+    const TabFindChannels = ({ 
+      showToast, 
+      callYouTubeApi, 
+      callGeminiApi,
+      ytKeysCount, 
+      geminiKeysCount,
+      onOpenSettings, 
+      onOpenHistory,
+      onSpyChannel, 
+      onCheckVideo, 
+      onAddAllToTracking,
+      userPlan, 
+      onOpenUpgrade, 
+      freeSearchesLeft, 
+      useFreeSearch,
+      addQuotaUnits,
+      sessionQuota,
+      todayTotalQuota
+    }) => {
       const [keyword, setKeyword] = useState('');
-      const [region, setRegion] = useState('US');
-      const [timeRange, setTimeRange] = useState('all');
-      const [minSubs, setMinSubs] = useState(10);
-      const [maxSubs, setMaxSubs] = useState(100);
-      const [maxResults, setMaxResults] = useState(15);
+      const [region, setRegion] = useState('VN');
+      const [timeRange, setTimeRange] = useState('month');
+      
+      // Filter State Parameters
+      const [minSubs, setMinSubs] = useState(1000);
+      const [maxSubs, setMaxSubs] = useState(1000000);
+      const [maxResults, setMaxResults] = useState(30);
+      const [minVideos, setMinVideos] = useState(1);
+      const [maxVideos, setMaxVideos] = useState(1000);
+      const [minViews, setMinViews] = useState(10000);
       
       const [autoRotateKw, setAutoRotateKw] = useState(true);
       const [isHuntSmall, setIsHuntSmall] = useState(false);
+      const [showAiKeywordsTable, setShowAiKeywordsTable] = useState(true);
 
       const [isLoading, setIsLoading] = useState(false);
       const [hasSearched, setHasSearched] = useState(false);
       const [channels, setChannels] = useState([]);
       const [aiKeywords, setAiKeywords] = useState([]);
+      const [statusMsg, setStatusMsg] = useState('');
 
-      const handleSearch = async () => {
+      const generateRelevantSubKeywords = (baseKw) => {
+        const cleanBase = baseKw.trim();
+        const modifiers = [
+          'miễn phí',
+          'hướng dẫn',
+          'capcut',
+          'canva',
+          'heygen',
+          'shorts',
+          'chatgpt',
+          'kiếm tiền',
+          'mới nhất',
+          'full quy trình',
+          'tự động'
+        ];
+        
+        const list = [cleanBase];
+        modifiers.forEach(mod => {
+          if (!cleanBase.toLowerCase().includes(mod)) {
+            list.push(`${cleanBase} ${mod}`);
+          }
+        });
+        return list;
+      };
+
+      const handleSearch = async (overrideKeyword = null) => {
+        const queryKw = overrideKeyword || keyword;
         if (ytKeysCount === 0) {
-          showToast('Vui lòng cài đặt API Key!', 'error');
+          showToast('Vui lòng cài đặt API Key trong mục Cài Đặt!', 'error');
           onOpenSettings();
           return;
         }
-        if (!keyword.trim()) {
+        if (!queryKw.trim()) {
           showToast('Vui lòng nhập từ khóa!', 'error');
           return;
         }
@@ -239,160 +422,228 @@
 
         setIsLoading(true);
         setHasSearched(true);
+        setStatusMsg(`Đang tiến hành phân tích & săn 10 Kênh Ngon cho từ khóa "${queryKw}"...`);
+        
         try {
-          setAiKeywords([
-            { id: 1, keyword: `${keyword} cơ bản`, trend: 'HOT', comp: 'Thấp', compScore: '9.0/10' },
-            { id: 2, keyword: `Hướng dẫn ${keyword}`, trend: 'HOT', comp: 'Trung bình', compScore: '7.5/10' },
-            { id: 3, keyword: `${keyword} 2026`, trend: 'MỚI', comp: 'Thấp', compScore: '8.8/10' },
-            { id: 4, keyword: `${keyword} kiếm tiền`, trend: 'HOT', comp: 'Cao', compScore: '6.5/10' },
-          ]);
-
           const timeDate = getTimeFilterDate(timeRange);
           const timeQuery = timeDate ? `&publishedAfter=${encodeURIComponent(timeDate)}` : '';
           const regionQuery = region !== 'GLOBAL' ? `&regionCode=${encodeURIComponent(region)}` : '';
           
           let collectedChannels = [];
-          let keywordsToTry = [keyword];
-          
-          if (autoRotateKw) {
-            keywordsToTry.push(
-              `${keyword} review`, 
-              `${keyword} 2026`, 
-              `top ${keyword}`, 
-              `hướng dẫn ${keyword}`
-            );
-          }
+          let unitsUsedThisSearch = 0;
 
-          for (let currentKw of keywordsToTry) {
-            if (collectedChannels.length >= 10 && !autoRotateKw) break;
-            
-            const searchData = await callYouTubeApi((key) => `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodeURIComponent(currentKw)}${regionQuery}&maxResults=${maxResults}${timeQuery}&key=${key}`);
+          const onTopicKeywords = generateRelevantSubKeywords(queryKw);
 
-            if (searchData.items && searchData.items.length > 0) {
-              const channelIdsMap = {};
-              searchData.items.forEach((item) => { 
-                if (item.snippet?.channelId) channelIdsMap[item.snippet.channelId] = true; 
+          const suggestedTableData = onTopicKeywords.map((kwItem, index) => ({
+            id: index + 1,
+            keyword: kwItem,
+            comp: index === 0 ? 'Trung bình' : (index % 3 === 0 ? 'Thấp' : 'Trung bình'),
+            compScore: index === 0 ? '10/10' : `${(9.5 - (index * 0.4)).toFixed(1)}/10`
+          }));
+          setAiKeywords(suggestedTableData);
+
+          const targetLimit = autoRotateKw ? 10 : maxResults;
+
+          for (let i = 0; i < onTopicKeywords.length; i++) {
+            if (collectedChannels.length >= targetLimit) break;
+
+            const activeKw = onTopicKeywords[i];
+
+            const searchRes = await callYouTubeApi(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodeURIComponent(activeKw)}${regionQuery}&maxResults=25${timeQuery}`);
+            unitsUsedThisSearch += 100;
+
+            if (searchRes.items && searchRes.items.length > 0) {
+              const channelVideoMap = {};
+              searchRes.items.forEach(item => {
+                if (item.snippet?.channelId) {
+                  const chId = item.snippet.channelId;
+                  if (!channelVideoMap[chId]) {
+                    channelVideoMap[chId] = {
+                      videoTitle: item.snippet.title,
+                      matchedKw: activeKw
+                    };
+                  }
+                }
               });
-              const channelIds = Object.keys(channelIdsMap).slice(0, 50).join(',');
 
-              if (channelIds) {
-                const statData = await callYouTubeApi((key) => `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=${channelIds}&key=${key}`);
+              const chIds = Object.keys(channelVideoMap).join(',');
 
-                if (statData.items) {
-                  const formattedChannels = statData.items.map((ch) => {
+              if (chIds) {
+                const channelData = await callYouTubeApi(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,topicDetails&id=${chIds}`);
+                unitsUsedThisSearch += 1;
+
+                if (channelData.items) {
+                  const formatted = channelData.items.map(ch => {
                     const subs = parseInt(ch.statistics.subscriberCount || 0);
                     const views = parseInt(ch.statistics.viewCount || 0);
                     const videos = parseInt(ch.statistics.videoCount || 0);
                     const age = calculateAgeDays(ch.snippet.publishedAt);
+                    const topicCat = parseTopicCategory(ch.topicDetails?.topicCategories);
                     
+                    const countryCode = ch.snippet.country || (region !== 'GLOBAL' ? region : 'VN');
+                    const countryName = COUNTRY_NAME_MAP[countryCode] || countryCode;
+
+                    const videoInfo = channelVideoMap[ch.id];
+                    const subNicheTitle = videoInfo 
+                      ? extractSubNicheFromTitle(videoInfo.videoTitle, videoInfo.matchedKw)
+                      : queryKw;
+
+                    const lowEst = Math.floor((views / 1000) * 0.2);
+                    const highEst = Math.floor((views / 1000) * 1.5);
+                    const incomeStr = `$${formatLocale(lowEst)} - $${formatLocale(highEst)}`;
+
+                    // Flexible dynamic outlier score (No rigid hardcut limits)
+                    const dynamicScore = calculateOutlierScore(views, subs, videos, age);
+
                     return {
                       id: ch.id,
                       name: ch.snippet.title,
                       handle: ch.snippet.customUrl || `@${ch.id.substring(0,8)}`,
-                      kw: currentKw,
-                      topic: 'N/A', 
-                      income: `$${formatLocale(Math.floor(views/1000 * 0.5))} - $${formatLocale(Math.floor(views/1000 * 2.5))}`,
+                      kw: subNicheTitle,
+                      topic: topicCat,
+                      income: incomeStr,
                       url: `youtube.com/channel/${ch.id}`,
-                      country: ch.snippet.country || 'N/A',
-                      date: new Date(ch.snippet.publishedAt).toLocaleDateString('vi-VN'),
+                      country: countryName,
+                      date: new Date(ch.snippet.publishedAt).toISOString().split('T')[0],
                       age: age,
                       sub: formatLocale(subs),
                       views: formatLocale(views),
                       videos: formatLocale(videos),
-                      score: (subs >= minSubs && subs <= maxSubs) ? '8.5' : '5.0',
+                      score: dynamicScore,
                       rawSubs: subs,
                       rawViews: views,
+                      rawVideos: videos,
                       thumbnail: ch.snippet.thumbnails.default.url
                     };
                   });
 
-                  let effectiveMaxSubs = maxSubs;
-                  if (isHuntSmall) {
-                    effectiveMaxSubs = Math.min(maxSubs, 50000);
-                  }
+                  // Primary filter checks against user-configured input ranges
+                  const filteredBatch = formatted.filter(c => 
+                    c.rawSubs >= minSubs && 
+                    c.rawSubs <= maxSubs &&
+                    c.rawVideos >= minVideos &&
+                    c.rawVideos <= maxVideos &&
+                    c.rawViews >= minViews
+                  );
 
-                  const batchFiltered = formattedChannels.filter((c) => c.rawSubs >= minSubs && c.rawSubs <= effectiveMaxSubs);
-                  
-                  for (let bc of batchFiltered) {
+                  for (let bc of filteredBatch) {
                     if (!collectedChannels.some(existing => existing.id === bc.id)) {
                       collectedChannels.push(bc);
+                      if (collectedChannels.length >= targetLimit) break;
                     }
                   }
                 }
               }
             }
 
-            if (collectedChannels.length >= 10 && autoRotateKw) break;
+            if (!autoRotateKw) break;
           }
 
-          if (isHuntSmall) {
-            collectedChannels.sort((a, b) => {
-              const ratioA = a.rawViews / (a.rawSubs || 1);
-              const ratioB = b.rawViews / (b.rawSubs || 1);
-              return ratioB - ratioA;
-            });
-          }
+          // Dynamic Ranking: High Viral Ratio & High Outlier Score prioritized
+          collectedChannels.sort((a, b) => {
+            const ratioA = a.rawViews / (a.rawSubs || 1);
+            const ratioB = b.rawViews / (b.rawSubs || 1);
+            if (isHuntSmall) {
+              return (ratioB * parseFloat(b.score)) - (ratioA * parseFloat(a.score));
+            }
+            return parseFloat(b.score) - parseFloat(a.score);
+          });
 
+          addQuotaUnits(unitsUsedThisSearch);
           setChannels(collectedChannels);
+
           if (collectedChannels.length > 0) {
-            showToast(`Đã tìm thấy ${collectedChannels.length} kênh thỏa mãn điều kiện!`, 'success');
+            const finalMsg = `🎉 ĐÃ GỒM ĐỦ ${collectedChannels.length} KÊNH NGON! Đã tự động dừng lại.`;
+            setStatusMsg(finalMsg);
+            showToast(finalMsg, 'success');
           } else {
-            showToast('Không tìm thấy kênh nào thỏa mãn điều kiện lọc.', 'warning');
+            const emptyMsg = `Không tìm thấy kênh nào thỏa mãn điều kiện lọc từ khóa "${queryKw}".`;
+            setStatusMsg(emptyMsg);
+            showToast(emptyMsg, 'warning');
           }
         } catch (err) {
           showToast(err.message, 'error');
+          setStatusMsg(`Lỗi: ${err.message}`);
         }
         setIsLoading(false);
       };
 
+      const handleExportTxt = () => {
+        if (channels.length === 0) return showToast('Không có dữ liệu kênh để tải!', 'warning');
+        let txtContent = `=== DANH SÁCH KÊNH YOUTUBE QUÉT ĐƯỢC (${new Date().toLocaleDateString('vi-VN')}) ===\n\n`;
+        channels.forEach((c, i) => {
+          txtContent += `${i + 1}. Kênh: ${c.name}\n   ID: ${c.id}\n   Từ khóa/Ngách: ${c.kw}\n   Chủ đề: ${c.topic}\n   Sub: ${c.sub} | Views: ${c.views} | Video: ${c.videos}\n   Tuổi kênh: ${c.age} ngày | Ngày tạo: ${c.date}\n   Thu nhập ước tính: ${c.income}\n   Điểm ngách: ${c.score}/10\n   URL: https://${c.url}\n\n----------------------------------------\n`;
+        });
+        downloadTxtFile(`YouTube_Channels_${keyword.replace(/\s+/g, '_')}.txt`, txtContent);
+        showToast('Đã tải xuống danh sách file TXT!', 'success');
+      };
+
+      const handleUseSuggestedKw = (suggestedKw) => {
+        setKeyword(suggestedKw);
+        handleSearch(suggestedKw);
+      };
+
       return (
         <div className="p-4 space-y-4 bg-gray-50 min-h-screen">
-          <div className="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-              <div className="md:col-span-3 space-y-3">
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-24">Từ khóa:</label><input type="text" value={keyword} onChange={(e)=>setKeyword(e.target.value)} placeholder="Ví dụ: Prehistoric Man, Cooking..." className="w-36 border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-blue-500" /></div>
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-24">Khu vực:</label><select value={region} onChange={(e)=>setRegion(e.target.value)} className="w-36 border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:border-blue-500 bg-white">{COUNTRIES_LIST.map((c) => (<option key={c.code} value={c.code}>{c.name}</option>))}</select></div>
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-24">Đăng trong:</label><select value={timeRange} onChange={(e)=>setTimeRange(e.target.value)} className="w-36 border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:border-blue-500 bg-white"><option value="all">Toàn thời gian</option><option value="today">Hôm nay</option><option value="week">Tuần này</option><option value="month">Tháng này</option><option value="year">Năm nay</option></select></div>
+          <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+              <div className="md:col-span-3 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-gray-700 w-24">Từ khóa:</label>
+                  <input type="text" value={keyword} onChange={(e)=>setKeyword(e.target.value)} placeholder="Ví dụ: Tạo video AI..." className="w-36 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 font-medium placeholder-gray-400 placeholder:italic text-gray-800" />
+                </div>
+                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-24">Khu vực:</label><select value={region} onChange={(e)=>setRegion(e.target.value)} className="w-36 border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500 bg-white">{COUNTRIES_LIST.map((c) => (<option key={c.code} value={c.code}>{c.name}</option>))}</select></div>
+                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-24">Đăng trong:</label><select value={timeRange} onChange={(e)=>setTimeRange(e.target.value)} className="w-36 border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500 bg-white"><option value="all">Toàn thời gian</option><option value="today">Hôm nay</option><option value="week">Tuần này</option><option value="month">Tháng này</option><option value="year">Năm nay</option></select></div>
               </div>
-              <div className="md:col-span-3 space-y-3">
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Đăng ký tối thiểu:</label><input type="number" value={minSubs} onChange={(e)=>setMinSubs(Number(e.target.value))} className="w-28 border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-blue-500 no-spinner" /></div>
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Đăng ký tối đa:</label><input type="number" value={maxSubs} onChange={(e)=>setMaxSubs(Number(e.target.value))} className="w-28 border border-yellow-400 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-blue-500 bg-yellow-50/30 no-spinner" /></div>
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Số lượng quét:</label><input type="number" value={maxResults} onChange={(e)=>setMaxResults(Number(e.target.value))} className="w-28 border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-blue-500 no-spinner" /></div>
+
+              <div className="md:col-span-3 space-y-2.5">
+                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Đăng ký tối thiểu:</label><input type="number" value={minSubs} onChange={(e)=>setMinSubs(Number(e.target.value))} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 no-spinner font-medium" /></div>
+                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Đăng ký tối đa:</label><input type="number" value={maxSubs} onChange={(e)=>setMaxSubs(Number(e.target.value))} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 no-spinner font-medium" /></div>
+                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Số lượng quét:</label><input type="number" value={maxResults} onChange={(e)=>setMaxResults(Number(e.target.value))} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 no-spinner font-medium" /></div>
               </div>
-              <div className="md:col-span-3 space-y-3">
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Video tối thiểu:</label><input type="number" defaultValue="1" className="w-28 border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-blue-500 no-spinner" /></div>
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Video tối đa:</label><input type="number" defaultValue="1000" className="w-28 border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-blue-500 no-spinner" /></div>
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Lượt xem t.thiểu:</label><input type="number" defaultValue="1000" className="w-28 border border-gray-300 rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-blue-500 no-spinner" /></div>
+
+              <div className="md:col-span-3 space-y-2.5">
+                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Video tối thiểu:</label><input type="number" value={minVideos} onChange={(e)=>setMinVideos(Number(e.target.value))} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 no-spinner font-medium" /></div>
+                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Video tối đa:</label><input type="number" value={maxVideos} onChange={(e)=>setMaxVideos(Number(e.target.value))} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 no-spinner font-medium" /></div>
+                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Lượt xem tối thiểu:</label><input type="number" value={minViews} onChange={(e)=>setMinViews(Number(e.target.value))} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 no-spinner font-medium" /></div>
               </div>
+
               <div className="md:col-span-3">
-                <div className="bg-gray-50 border border-gray-200 rounded p-3 h-full flex flex-col justify-between">
+                <div className="bg-blue-50/40 border border-blue-100 rounded p-3 h-full flex flex-col justify-between">
                   <div>
-                    <div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-gray-700">Hệ thống API & Gói</span><span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${userPlan === 'FREE' ? 'bg-gray-200 text-gray-700' : 'bg-orange-500 text-white'}`}>{userPlan} TIER</span></div>
-                    <div className="space-y-1"><div className="flex justify-between text-xs"><span className="flex items-center text-red-600"><Play className="w-3 h-3 mr-1 fill-current"/> YouTube API Pool:</span><span className={ytKeysCount > 0 ? "text-green-600 font-semibold" : "text-red-600 font-semibold"}>{ytKeysCount > 0 ? `${ytKeysCount} Key sẵn sàng` : 'Chưa kết nối'}</span></div></div>
+                    <div className="flex justify-between items-center mb-1.5"><span className="text-xs font-bold text-gray-700">HỆ THỐNG API</span> <div className="flex gap-1"><span className="w-2 h-2 rounded-full bg-green-500 inline-block animate-pulse"></span><span className="w-2 h-2 rounded-full bg-blue-500 inline-block"></span></div></div>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex justify-between text-gray-600"><span>📺 YouTube V3:</span> <span className="font-bold text-blue-700">{ytKeysCount} Key</span></div>
+                      <div className="flex justify-between text-gray-600"><span>🤖 Gemini AI:</span> <span className="font-bold text-orange-600">{geminiKeysCount} Key</span></div>
+                    </div>
                   </div>
-                  <button onClick={onOpenSettings} className="w-full mt-3 bg-blue-600 text-white text-xs font-bold py-1.5 rounded flex items-center justify-center hover:bg-blue-700"><Settings className="w-3 h-3 mr-1"/> CÀI ĐẶT API</button>
+                  <div className="flex gap-1.5 mt-2">
+                    <button onClick={onOpenSettings} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold py-1.5 rounded flex items-center justify-center"><Settings className="w-3 h-3 mr-1"/> CÀI ĐẶT</button>
+                    <button onClick={onOpenHistory} className="bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 text-[11px] font-bold px-2.5 py-1.5 rounded flex items-center"><History className="w-3 h-3 mr-1"/> LỊCH SỬ</button>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-5 flex flex-col md:flex-row items-end justify-between border-t border-gray-100 pt-4 gap-4">
+            <div className="mt-4 flex flex-col md:flex-row items-end justify-between border-t border-gray-100 pt-3 gap-3">
               <div className="flex flex-col md:flex-row gap-3">
-                <div className="flex items-start bg-orange-50/50 p-2 rounded border border-orange-100">
-                  <input type="checkbox" checked={autoRotateKw} onChange={(e)=>setAutoRotateKw(e.target.checked)} className="mt-1 w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500" />
+                <div className="flex items-start bg-orange-50/60 p-2 rounded border border-orange-200">
+                  <input type="checkbox" checked={autoRotateKw} onChange={(e)=>setAutoRotateKw(e.target.checked)} className="mt-0.5 w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500 cursor-pointer" />
                   <div className="ml-2">
-                    <div className="text-xs font-bold text-orange-700">Tự động chuyển từ khóa</div>
-                    <div className="text-[10px] text-orange-500">đến khi đủ 10 Kênh</div>
+                    <div className="text-xs font-bold text-orange-800">Tự động chuyển từ khóa</div>
+                    <div className="text-[10px] text-orange-600">đến khi đủ 10 Kênh Ngon</div>
                   </div>
                 </div>
-                <div className="flex items-start bg-blue-50/50 p-2 rounded border border-blue-100">
-                  <input type="checkbox" checked={isHuntSmall} onChange={(e) => setIsHuntSmall(e.target.checked)} className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                <div className="flex items-start bg-blue-50/60 p-2 rounded border border-blue-200">
+                  <input type="checkbox" checked={isHuntSmall} onChange={(e) => setIsHuntSmall(e.target.checked)} className="mt-0.5 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer" />
                   <div className="ml-2">
-                    <div className="text-xs font-bold text-blue-700">Săn kênh nhỏ / Mới trend</div>
-                    <div className="text-[10px] text-blue-500">Ưu tiên sub thấp, view bùng nổ</div>
+                    <div className="text-xs font-bold text-blue-800">Ưu tiên Kênh Nhỏ / Viral Ratio Cao</div>
+                    <div className="text-[10px] text-blue-600">Linh hoạt sắp xếp theo độ đột biến View/Sub</div>
                   </div>
                 </div>
               </div>
-              <button onClick={handleSearch} disabled={isLoading} className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 px-8 rounded shadow-md flex items-center transition-colors text-sm disabled:opacity-50">
+
+              <button onClick={() => handleSearch()} disabled={isLoading} className="bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 px-8 rounded-lg shadow-md flex items-center transition-colors text-sm disabled:opacity-50 tracking-wider">
                 {isLoading ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Play className="w-4 h-4 mr-2 fill-current" />}
                 {isLoading ? 'ĐANG QUÉT...' : 'BẮT ĐẦU TÌM KÊNH'}
               </button>
@@ -400,46 +651,133 @@
           </div>
 
           {hasSearched ? (
-            <div className="space-y-4">
-              {aiKeywords.length > 0 && (
-                <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-                   <div className="bg-[#f97316] text-white px-3 py-2 flex justify-between items-center"><h3 className="text-xs font-bold flex items-center"><List className="w-4 h-4 mr-2"/> DANH SÁCH GỢI Ý NGÁCH LIÊN QUAN - TỪ KHÓA ĐỀ XUẤT (AI)</h3></div>
+            <div className="space-y-4 animate-fade-in">
+              {/* Niche Keyword Suggestions Table */}
+              <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                 <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-3 py-2 flex justify-between items-center">
+                   <h3 className="text-xs font-bold flex items-center"><Activity className="w-4 h-4 mr-2"/> DANH SÁCH GỢI Ý NGÁCH LIÊN QUAN - TỪ KHÓA ĐỀ XUẤT ({aiKeywords.length})</h3>
+                   <button onClick={() => setShowAiKeywordsTable(!showAiKeywordsTable)} className="bg-orange-700/60 hover:bg-orange-800 px-2.5 py-1 rounded text-[10px] font-bold transition">
+                     {showAiKeywordsTable ? '✕ ẨN BẢNG' : '👁️ HIỆN BẢNG'}
+                   </button>
+                 </div>
+                 {showAiKeywordsTable && (
                    <div className="overflow-x-auto">
                      <table className="w-full text-left text-xs">
-                       <thead className="bg-gray-50 border-b border-gray-200 text-gray-700"><tr><th className="px-3 py-2 font-bold w-12 text-center">STT</th><th className="px-3 py-2 font-bold">TỪ KHÓA / NGÁCH TIỀM NĂNG</th><th className="px-3 py-2 font-bold text-center">CẠNH TRANH</th><th className="px-3 py-2 font-bold text-center">ĐIỂM SEO</th></tr></thead>
+                       <thead className="bg-gray-50 border-b border-gray-200 text-gray-700 font-bold">
+                         <tr>
+                           <th className="px-3 py-2 text-center w-12">STT</th>
+                           <th className="px-3 py-2">TỪ KHÓA / NGÁCH TIỀM NĂNG</th>
+                           <th className="px-3 py-2 text-center">CẠNH TRANH</th>
+                           <th className="px-3 py-2 text-center">ĐIỂM SEO</th>
+                         </tr>
+                       </thead>
                        <tbody className="divide-y divide-gray-100">
                          {aiKeywords.map((item, idx) => (
-                           <tr key={item.id} className="hover:bg-gray-50"><td className="px-3 py-2 text-center text-gray-500">{idx + 1}</td><td className="px-3 py-2 font-medium"><span className="text-gray-800">{item.keyword}</span><span className="ml-2 text-[10px] font-bold text-blue-500 bg-blue-50 px-1 py-0.5 rounded border border-blue-100">{item.trend}</span></td><td className="px-3 py-2 text-center"><span className={`font-bold ${item.comp === 'Thấp' ? 'text-green-500' : item.comp === 'Trung bình' ? 'text-yellow-600' : 'text-red-500'}`}>{item.comp}</span></td><td className="px-3 py-2 text-center font-bold text-blue-600">{item.compScore}</td></tr>
+                           <tr key={item.id} className="hover:bg-orange-50/30">
+                             <td className="px-3 py-2 text-center text-gray-500">{idx + 1}</td>
+                             <td className="px-3 py-2 font-semibold">
+                               <span className="text-gray-900">{item.keyword}</span>
+                               <button onClick={() => handleUseSuggestedKw(item.keyword)} className="ml-2.5 bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm">DÙNG</button>
+                             </td>
+                             <td className="px-3 py-2 text-center"><span className={`font-bold ${item.comp === 'Thấp' ? 'text-green-600' : item.comp === 'Trung bình' ? 'text-yellow-600' : 'text-red-600'}`}>{item.comp}</span></td>
+                             <td className="px-3 py-2 text-center font-bold text-blue-600">{item.compScore}</td>
+                           </tr>
                          ))}
                        </tbody>
                      </table>
                    </div>
-                </div>
-              )}
+                 )}
+              </div>
 
+              {/* Main Channel List Table */}
               <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-                 <div className="bg-[#334155] text-white px-3 py-2 flex justify-between items-center"><h3 className="text-xs font-bold flex items-center"><List className="w-4 h-4 mr-2"/> DANH SÁCH KÊNH QUÉT ĐƯỢC</h3><span className="bg-blue-500 text-[10px] px-2 py-0.5 rounded font-bold">TỔNG: {channels.length}</span></div>
+                 <div className="bg-[#1e293b] text-white px-3 py-2 flex flex-col md:flex-row justify-between items-center gap-2">
+                   <div className="flex items-center space-x-2">
+                     <h3 className="text-xs font-bold flex items-center"><List className="w-4 h-4 mr-2 text-blue-400"/> DANH SÁCH KÊNH NGON QUÉT ĐƯỢC (TỰ ĐỘNG LỌC OUTLIER)</h3>
+                     <span className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded font-extrabold">TỔNG: {channels.length}</span>
+                   </div>
+                   <div className="flex items-center space-x-2">
+                     <button onClick={handleExportTxt} className="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold px-3 py-1 rounded shadow flex items-center"><Download className="w-3.5 h-3.5 mr-1" /> Tải TXT</button>
+                     <button onClick={() => { onAddAllToTracking(channels); showToast(`Đã thêm ${channels.length} kênh vào danh sách theo dõi!`, 'success'); }} className="bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold px-3 py-1 rounded shadow flex items-center"><Target className="w-3.5 h-3.5 mr-1" /> Theo Dõi Tất Cả</button>
+                     <button onClick={() => { setChannels([]); showToast('Đã xóa tất cả kết quả!', 'info'); }} className="bg-red-500 hover:bg-red-600 text-white text-[11px] font-bold px-3 py-1 rounded shadow flex items-center"><Trash2 className="w-3.5 h-3.5 mr-1" /> Xóa Tất Cả</button>
+                   </div>
+                 </div>
+
                  <div className="overflow-x-auto">
                    <table className="w-full text-left text-xs whitespace-nowrap">
-                     <thead className="bg-gray-100 border-b border-gray-200 text-gray-700"><tr><th className="px-2 py-3 text-center">STT</th><th className="px-2 py-3 text-center">ICON</th><th className="px-2 py-3">TÊN KÊNH</th><th className="px-2 py-3 text-center">THU NHẬP</th><th className="px-2 py-3 text-center">QUỐC GIA</th><th className="px-2 py-3 text-center">TUỔI KÊNH</th><th className="px-2 py-3 text-center">SUB</th><th className="px-2 py-3 text-center">VIEWS</th><th className="px-2 py-3 text-center">VIDEOS</th><th className="px-2 py-3 text-center">THAO TÁC</th></tr></thead>
+                     <thead className="bg-gray-100 border-b border-gray-200 text-gray-700 font-bold">
+                       <tr>
+                         <th className="px-2 py-2.5 text-center">STT</th>
+                         <th className="px-2 py-2.5 text-center">ICON</th>
+                         <th className="px-2 py-2.5">TÊN KÊNH</th>
+                         <th className="px-2 py-2.5">MÃ KÊNH</th>
+                         <th className="px-2 py-2.5">TỪ KHÓA/NGÁCH</th>
+                         <th className="px-2 py-2.5">CHỦ ĐỀ</th>
+                         <th className="px-2 py-2.5 text-center">THU NHẬP ($)</th>
+                         <th className="px-2 py-2.5">URL</th>
+                         <th className="px-2 py-2.5 text-center">QUỐC GIA</th>
+                         <th className="px-2 py-2.5 text-center">NGÀY TẠO</th>
+                         <th className="px-2 py-2.5 text-center">TUỔI KÊNH (NGÀY)</th>
+                         <th className="px-2 py-2.5 text-right">SUB</th>
+                         <th className="px-2 py-2.5 text-right">VIEWS</th>
+                         <th className="px-2 py-2.5 text-center">VIDEOS</th>
+                         <th className="px-2 py-2.5 text-center">* ĐIỂM NGÔN</th>
+                         <th className="px-2 py-2.5 text-center">THAO TÁC</th>
+                       </tr>
+                     </thead>
                      <tbody className="divide-y divide-gray-200">
                        {channels.map((item, idx) => (
-                         <tr key={item.id} className="hover:bg-blue-50/50"><td className="px-2 py-2 text-center">{idx + 1}</td><td className="px-2 py-2 text-center"><img src={item.thumbnail} className="w-6 h-6 rounded-full mx-auto" /></td><td className="px-2 py-2 font-bold text-gray-800">{item.name}</td><td className="px-2 py-2 text-center text-green-600 font-semibold">{item.income}</td><td className="px-2 py-2 text-center">{item.country}</td><td className="px-2 py-2 text-center">{item.age}</td><td className="px-2 py-2 text-center font-bold text-gray-700">{item.sub}</td><td className="px-2 py-2 text-center font-bold text-blue-600">{item.views}</td><td className="px-2 py-2 text-center">{item.videos}</td><td className="px-2 py-2 text-center"><button onClick={() => onSpyChannel(item.id)} className="bg-blue-600 text-white text-[9px] font-bold px-2 py-1 rounded">SPY</button></td></tr>
+                         <tr key={item.id} className="hover:bg-blue-50/60 transition-colors">
+                           <td className="px-2 py-2 text-center text-gray-500 font-semibold">{idx + 1}</td>
+                           <td className="px-2 py-2 text-center"><img src={item.thumbnail} className="w-7 h-7 rounded-full mx-auto shadow-sm" /></td>
+                           <td className="px-2 py-2 font-bold text-gray-900">{item.name}</td>
+                           <td className="px-2 py-2 font-mono text-[10px] text-gray-600">{item.id}</td>
+                           <td className="px-2 py-2 font-medium text-blue-700">{item.kw}</td>
+                           <td className="px-2 py-2 font-semibold text-purple-700">{item.topic}</td>
+                           <td className="px-2 py-2 text-center text-green-600 font-bold">{item.income}</td>
+                           <td className="px-2 py-2 text-blue-500 hover:underline"><a href={`https://${item.url}`} target="_blank" rel="noreferrer">youtube.com</a></td>
+                           <td className="px-2 py-2 text-center font-medium">{item.country}</td>
+                           <td className="px-2 py-2 text-center text-gray-600">{item.date}</td>
+                           <td className="px-2 py-2 text-center font-bold text-gray-700">{item.age}</td>
+                           <td className="px-2 py-2 text-right font-black text-gray-800">{item.sub}</td>
+                           <td className="px-2 py-2 text-right font-black text-blue-600">{item.views}</td>
+                           <td className="px-2 py-2 text-center font-bold">{item.videos}</td>
+                           <td className="px-2 py-2 text-center"><span className="bg-yellow-100 text-yellow-800 font-black px-2 py-0.5 rounded text-[11px] border border-yellow-300">{item.score}</span></td>
+                           <td className="px-2 py-2 text-center">
+                             <button onClick={() => onSpyChannel(item.id)} className="bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold px-2 py-1 rounded mr-1">SPY</button>
+                             <button onClick={() => onCheckVideo(item.id)} className="bg-orange-500 hover:bg-orange-600 text-white text-[9px] font-bold px-2 py-1 rounded">CHECK</button>
+                           </td>
+                         </tr>
                        ))}
-                       {channels.length === 0 && (<tr><td colSpan="10" className="text-center py-6 text-gray-500 italic">Không có kênh nào thỏa mãn điều kiện lọc.</td></tr>)}
+                       {channels.length === 0 && (
+                         <tr><td colSpan="16" className="text-center py-8 text-gray-400 italic">Chưa có kết quả nào. Bấm "BẮT ĐẦU TÌM KÊNH" để thực thi.</td></tr>
+                       )}
                      </tbody>
                    </table>
+                 </div>
+
+                 {/* Bottom Status Bar */}
+                 <div className="bg-gray-100 border-t border-gray-200 px-4 py-2 flex flex-col md:flex-row justify-between items-center text-[11px] text-gray-600 font-medium">
+                   <div className="flex items-center text-blue-800 font-bold">
+                     <span className="w-2 h-2 rounded-full bg-blue-600 mr-2 animate-ping"></span>
+                     {statusMsg || 'Đã sẵn sàng tìm kiếm ngách YouTube.'}
+                   </div>
+                   <div>
+                     Quota phần này: <strong className="text-orange-600">{formatLocale(sessionQuota)} units</strong> | Tổng Quota hôm nay đã dùng: <strong className="text-red-600">{formatLocale(todayTotalQuota)} units</strong>
+                   </div>
                  </div>
               </div>
             </div>
           ) : (
-            <div className="bg-white border border-gray-200 rounded-lg p-10 mt-4 text-center text-gray-400 text-sm italic">Chưa có kết quả nào. Bấm "Bắt đầu tìm kênh" để bắt đầu...</div>
+            <div className="bg-white border border-gray-200 rounded-lg p-12 text-center text-gray-400 text-sm italic">
+              Chưa có kết quả nào. Bấm "BẮT ĐẦU TÌM KÊNH" để quét dữ liệu tự động...
+            </div>
           )}
         </div>
       );
     };
 
-    const TabSpyChannel = ({ showToast, callYouTubeApi, ytKeysCount, externalChannelId, onAnalyzeVideo }) => {
+    const TabSpyChannel = ({ showToast, callYouTubeApi, externalChannelId, onAnalyzeVideo }) => {
       const [channelIdInput, setChannelIdInput] = useState(externalChannelId || '');
       const [channelData, setChannelData] = useState(null);
       const [videosData, setVideosData] = useState([]);
@@ -450,7 +788,6 @@
 
       const handleAnalyzeSpy = async (targetId) => {
         const inputVal = targetId || channelIdInput;
-        if (ytKeysCount === 0) return showToast('Vui lòng cài đặt API Key!', 'error');
         if (!inputVal.trim()) return showToast('Vui lòng nhập Channel ID hoặc Link!', 'error');
         setIsLoading(true);
         let finalId = inputVal.trim();
@@ -460,10 +797,11 @@
         }
 
         try {
-          const channelJson = await callYouTubeApi((key) => finalId.startsWith('@')
-            ? `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&forHandle=${encodeURIComponent(finalId)}&key=${key}`
-            : `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&id=${finalId}&key=${key}`
-          );
+          let urlPath = finalId.startsWith('@') 
+            ? `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&forHandle=${encodeURIComponent(finalId)}`
+            : `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&id=${finalId}`;
+          
+          const channelJson = await callYouTubeApi(urlPath);
 
           if (channelJson.items && channelJson.items.length > 0) {
             const channel = channelJson.items[0];
@@ -474,10 +812,10 @@
             });
             const uploadsId = channel.contentDetails?.relatedPlaylists?.uploads;
             if (uploadsId) {
-                const plistJson = await callYouTubeApi((key) => `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsId}&maxResults=10&key=${key}`);
+                const plistJson = await callYouTubeApi(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsId}&maxResults=10`);
                 if (plistJson.items) {
                     const vidIds = plistJson.items.map(item => item.snippet.resourceId.videoId).join(',');
-                    const vJson = await callYouTubeApi((key) => `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${vidIds}&key=${key}`);
+                    const vJson = await callYouTubeApi(`https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${vidIds}`);
                     const formattedVids = vJson.items.map(v => {
                       const vph = calculateVPH(v.statistics.viewCount, v.snippet.publishedAt);
                       const desc = v.snippet.description || '';
@@ -497,11 +835,11 @@
         <div className="p-4 space-y-4 bg-gray-50 min-h-screen overflow-y-auto custom-scrollbar">
           <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm flex items-center gap-3">
              <div className="flex items-center gap-2 flex-1"><label className="text-sm font-bold text-gray-700 whitespace-nowrap">Channel ID / Handle:</label><input type="text" value={channelIdInput} onChange={(e)=>setChannelIdInput(e.target.value)} placeholder="Nhập Channel ID hoặc @handle..." className="w-1/2 border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-blue-500" /></div>
-             <button onClick={() => handleAnalyzeSpy()} disabled={isLoading} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded shadow flex items-center text-sm disabled:opacity-50">{isLoading ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <BarChart2 className="w-4 h-4 mr-2" />}PHÂN TÍCH SPY</button>
+             <button onClick={() => handleAnalyzeSpy()} disabled={isLoading} className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded shadow flex items-center text-sm disabled:opacity-50">{isLoading ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <BarChart2 className="w-4 h-4 mr-2" />}PHÂN TÍCH SPY</button>
           </div>
           {channelData && (
             <div className="bg-white border border-gray-200 rounded-lg p-5 shadow-sm flex gap-6 animate-fade-in">
-               <div className="w-32 flex flex-col items-center flex-shrink-0"><img src={channelData.thumbnail} className="w-24 h-24 rounded-full shadow-sm mb-2 object-cover" /><div className="font-bold text-gray-800 text-sm text-center">{channelData.title}</div><a href={`https://youtube.com/channel/${channelData.id}`} target="_blank" className="text-blue-500 text-[10px] hover:underline mt-1">Xem kênh 👉</a></div>
+               <div className="w-32 flex flex-col items-center flex-shrink-0"><img src={channelData.thumbnail} className="w-24 h-24 rounded-full shadow-sm mb-2 object-cover" /><div className="font-bold text-gray-800 text-sm text-center">{channelData.title}</div><a href={`https://youtube.com/channel/${channelData.id}`} target="_blank" rel="noreferrer" className="text-blue-500 text-[10px] hover:underline mt-1">Xem kênh 👉</a></div>
                <div className="flex-1 text-xs text-gray-700 space-y-2">
                   <div><span className="font-bold text-blue-800">Quốc gia:</span> {channelData.country} &nbsp;|&nbsp; <span className="font-bold text-blue-800">Tuổi kênh:</span> {formatLocale(channelData.ageDays)} ngày</div>
                   <div><span className="font-bold text-blue-800">Đăng ký:</span> {channelData.subscriberCount} &nbsp;|&nbsp; <span className="font-bold text-blue-800">Lượt xem:</span> {channelData.viewCount} &nbsp;|&nbsp; <span className="font-bold text-blue-800">Video:</span> {channelData.videoCount}</div>
@@ -515,7 +853,7 @@
                  <div className="bg-[#334155] text-white px-3 py-2 flex"><h3 className="text-xs font-bold flex items-center"><Play className="w-4 h-4 mr-2"/> Video mới nhất từ kênh</h3></div>
                  <div className="overflow-x-auto">
                    <table className="w-full text-left text-xs whitespace-nowrap">
-                     <thead className="bg-gray-100 border-b border-gray-200"><tr><th className="px-2 py-3 text-center">THUMB</th><th className="px-2 py-3 text-center">XEM CT</th><th className="px-2 py-3 max-w-[250px]">TIÊU ĐỀ</th><th className="px-2 py-3 text-right">VIEWS</th><th className="px-2 py-3 text-center">VPH</th><th className="px-2 py-3 text-center">TREND SCORE</th></tr></thead>
+                     <thead className="bg-gray-100 border-b border-gray-200 font-bold"><tr><th className="px-2 py-3 text-center">THUMB</th><th className="px-2 py-3 text-center">XEM CT</th><th className="px-2 py-3 max-w-[250px]">TIÊU ĐỀ</th><th className="px-2 py-3 text-right">VIEWS</th><th className="px-2 py-3 text-center">VPH</th><th className="px-2 py-3 text-center">TREND SCORE</th></tr></thead>
                      <tbody className="divide-y divide-gray-200">
                        {videosData.map((item, idx) => (
                          <tr key={idx} onClick={() => setSelectedVideoDetail(item)} className={`cursor-pointer hover:bg-blue-50 ${selectedVideoDetail?.id === item.id ? 'bg-blue-50 border-l-4 border-blue-500' : ''}`}><td className="px-2 py-2 text-center"><img src={item.thumb} className="w-16 h-9 object-cover rounded mx-auto" /></td><td className="px-2 py-2 text-center"><button onClick={(e) => { e.stopPropagation(); onAnalyzeVideo(item.id); }} className="bg-orange-500 text-white text-[9px] font-bold px-2 py-1 rounded">CHECK</button></td><td className="px-2 py-2 text-blue-700 font-bold max-w-[250px] overflow-hidden text-ellipsis text-[9px]">{item.title}</td><td className="px-2 py-2 text-right font-bold text-gray-700">{item.views}</td><td className="px-2 py-2 text-center font-bold text-blue-600">{item.vph}</td><td className="px-2 py-2 text-center font-bold text-green-500">{item.outlier}</td></tr>
@@ -542,7 +880,7 @@
       );
     };
 
-    const TabCheckVideo = ({ showToast, callYouTubeApi, ytKeysCount, initialVideoId, onSpyChannel }) => {
+    const TabCheckVideo = ({ showToast, callYouTubeApi, initialVideoId }) => {
       const [inputValue, setInputValue] = useState(initialVideoId || '');
       const [videoData, setVideoData] = useState(null);
       const [isLoading, setIsLoading] = useState(false);
@@ -551,7 +889,6 @@
 
       const handleCheckVideo = async (targetId) => {
         const val = targetId || inputValue;
-        if (ytKeysCount === 0) return showToast('Vui lòng cài đặt API Key!', 'error');
         if (!val) return showToast('Vui lòng nhập Video ID hoặc Link!', 'error');
         let finalVideoId = val.trim();
         const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/i;
@@ -560,7 +897,7 @@
 
         setIsLoading(true);
         try {
-           const data = await callYouTubeApi((key) => `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,contentDetails&id=${finalVideoId}&key=${key}`);
+           const data = await callYouTubeApi(`https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,contentDetails&id=${finalVideoId}`);
            if (data.items && data.items.length > 0) {
                const video = data.items[0];
                const vph = calculateVPH(video.statistics.viewCount, video.snippet.publishedAt);
@@ -582,7 +919,7 @@
                <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
                  <div className="flex justify-between items-start mb-4">
                     <div><div className="text-xs text-blue-600 font-bold mb-1 tracking-wider">TỪ TIÊU ĐỀ VIDEO</div><h2 className="text-xl font-bold text-gray-800">{videoData.title}</h2></div>
-                    <a href={`https://youtube.com/watch?v=${videoData.id}`} target="_blank" className="bg-red-600 text-white font-bold py-2 px-6 rounded shadow flex items-center text-sm whitespace-nowrap"><Play className="w-4 h-4 mr-2 fill-current" /> XEM VIDEO</a>
+                    <a href={`https://youtube.com/watch?v=${videoData.id}`} target="_blank" rel="noreferrer" className="bg-red-600 text-white font-bold py-2 px-6 rounded shadow flex items-center text-sm whitespace-nowrap"><Play className="w-4 h-4 mr-2 fill-current" /> XEM VIDEO</a>
                  </div>
                  <div className="grid grid-cols-12 gap-6">
                     <div className="col-span-12 md:col-span-5 rounded-xl overflow-hidden bg-gray-900 shadow-inner flex items-center"><img src={videoData.thumbnail} className="w-full h-auto object-cover" /></div>
@@ -606,13 +943,43 @@
       );
     };
 
-    const TabTracking = ({ showToast, callYouTubeApi, ytKeysCount, onSpyChannel }) => {
+    const TabTracking = ({ showToast, callYouTubeApi, onSpyChannel, externalTrackList, setExternalTrackList }) => {
       const [inputValue, setInputValue] = useState('');
-      const [trackedChannels, setTrackedChannels] = useState([]);
       const [isLoading, setIsLoading] = useState(false);
+      const [isRefreshing, setIsRefreshing] = useState(false);
+
+      const refreshAllChannels = async (notify = true) => {
+        if (externalTrackList.length === 0) return;
+        setIsRefreshing(true);
+        try {
+          const ids = externalTrackList.map(c => c.id).join(',');
+          const data = await callYouTubeApi(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=${ids}`);
+          if (data.items) {
+            setExternalTrackList(prev => prev.map(ch => {
+              const updated = data.items.find(item => item.id === ch.id);
+              if (updated) {
+                const oldSub = parseInt((ch.sub || "0").replace(/\./g, ''));
+                const newSub = parseInt(updated.statistics.subscriberCount || 0);
+                const diff = newSub - oldSub;
+                const growthStr = diff >= 0 ? `+${formatLocale(diff)}` : formatLocale(diff);
+                return {
+                  ...ch,
+                  sub: formatLocale(newSub),
+                  subGrowth: growthStr !== '+0' ? growthStr : ch.subGrowth,
+                  views: formatLocale(updated.statistics.viewCount)
+                };
+              }
+              return ch;
+            }));
+            if (notify) showToast('Đã tự động cập nhật số liệu thời gian thực!', 'success');
+          }
+        } catch (e) {
+          console.error("Auto refresh failed:", e);
+        }
+        setIsRefreshing(false);
+      };
 
       const handleTrackChannel = async () => {
-        if (ytKeysCount === 0) return showToast('Vui lòng cài đặt API Key!', 'error');
         if (!inputValue.trim()) return showToast('Vui lòng nhập Link Kênh!', 'error');
         setIsLoading(true);
         let finalId = inputValue.trim();
@@ -622,14 +989,12 @@
         }
 
         try {
-          const data = await callYouTubeApi((key) => finalId.startsWith('@') 
-            ? `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&forHandle=${encodeURIComponent(finalId)}&key=${key}` 
-            : `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=${finalId}&key=${key}`
-          );
+          const fetchUrl = finalId.startsWith('@') ? `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&forHandle=${encodeURIComponent(finalId)}` : `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=${finalId}`;
+          const data = await callYouTubeApi(fetchUrl);
           if (data.items && data.items.length > 0) {
             const ch = data.items[0];
-            if (trackedChannels.find(item => item.id === ch.id)) { setIsLoading(false); return showToast('Kênh này đã được theo dõi!', 'warning'); }
-            setTrackedChannels(prev => [{ id: ch.id, name: ch.snippet.title, handle: ch.snippet.customUrl || `@${ch.id.substring(0,8)}`, sub: formatLocale(ch.statistics.subscriberCount), subGrowth: '+0', views: formatLocale(ch.statistics.viewCount), date: new Date().toLocaleDateString('vi-VN'), status: 'Đang theo dõi', thumbnail: ch.snippet.thumbnails.default?.url }, ...prev]);
+            if (externalTrackList.find(item => item.id === ch.id)) { setIsLoading(false); return showToast('Kênh này đã được theo dõi!', 'warning'); }
+            setExternalTrackList(prev => [{ id: ch.id, name: ch.snippet.title, handle: ch.snippet.customUrl || `@${ch.id.substring(0,8)}`, sub: formatLocale(ch.statistics.subscriberCount), subGrowth: '+0', views: formatLocale(ch.statistics.viewCount), date: new Date().toLocaleDateString('vi-VN'), status: 'Đang theo dõi', thumbnail: ch.snippet.thumbnails.default?.url }, ...prev]);
             setInputValue(''); showToast('Đã thêm vào theo dõi!', 'success');
           } else throw new Error('Không tìm thấy kênh này!');
         } catch (err) { showToast(err.message, 'error'); }
@@ -640,18 +1005,19 @@
         <div className="p-4 space-y-4 bg-gray-50 min-h-screen overflow-y-auto custom-scrollbar animate-fade-in">
           <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm flex items-center gap-3">
              <div className="flex-1 relative"><Target className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" /><input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Nhập Channel ID hoặc URL Kênh..." className="w-full border border-gray-300 rounded-md pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-blue-500 font-medium" /></div>
-             <button onClick={handleTrackChannel} disabled={isLoading} className="bg-orange-500 text-white font-bold py-2.5 px-6 rounded-md shadow flex items-center text-sm disabled:opacity-50">{isLoading ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Target className="w-4 h-4 mr-2" />}BẮT ĐẦU THEO DÕI</button>
+             <button onClick={handleTrackChannel} disabled={isLoading} className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 px-6 rounded-md shadow flex items-center text-sm disabled:opacity-50">{isLoading ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Target className="w-4 h-4 mr-2" />}BẮT ĐẦU THEO DÕI</button>
+             <button onClick={() => refreshAllChannels(true)} disabled={isRefreshing} className="bg-blue-600 text-white font-bold py-2.5 px-4 rounded-md shadow flex items-center text-sm disabled:opacity-50" title="Cập nhật số liệu mới nhất">{isRefreshing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}</button>
           </div>
           <div className="bg-white border rounded-lg shadow-sm overflow-hidden">
-             <div className="bg-[#334155] text-white px-3 py-2 flex justify-between"><h3 className="text-xs font-bold flex items-center"><List className="w-4 h-4 mr-2"/> ĐỐI THỦ ĐANG THEO DÕI</h3><span className="bg-blue-500 text-[10px] px-2 py-0.5 rounded font-bold">TỔNG: {trackedChannels.length}</span></div>
+             <div className="bg-[#1e293b] text-white px-3 py-2 flex justify-between items-center"><h3 className="text-xs font-bold flex items-center"><List className="w-4 h-4 mr-2"/> ĐỐI THỦ ĐANG THEO DÕI (TỰ ĐỘNG LƯU & CẬP NHẬT)</h3><span className="bg-blue-600 text-[10px] px-2 py-0.5 rounded font-bold">TỔNG: {externalTrackList.length}</span></div>
              <div className="overflow-x-auto">
                <table className="w-full text-left text-xs whitespace-nowrap">
-                 <thead className="bg-gray-100 border-b text-gray-700"><tr><th className="px-2 py-3 text-center">STT</th><th className="px-2 py-3">KÊNH</th><th className="px-2 py-3 text-center">NGÀY BẮT ĐẦU</th><th className="px-2 py-3 text-center">SUB</th><th className="px-2 py-3 text-center">VIEWS</th><th className="px-2 py-3 text-center">THAO TÁC</th></tr></thead>
+                 <thead className="bg-gray-100 border-b text-gray-700 font-bold"><tr><th className="px-2 py-3 text-center">STT</th><th className="px-2 py-3">KÊNH</th><th className="px-2 py-3 text-center">NGÀY BẮT ĐẦU</th><th className="px-2 py-3 text-center">SUB</th><th className="px-2 py-3 text-center">VIEWS</th><th className="px-2 py-3 text-center">THAO TÁC</th></tr></thead>
                  <tbody className="divide-y divide-gray-200">
-                   {trackedChannels.map((item, idx) => (
-                     <tr key={item.id} className="hover:bg-blue-50"><td className="px-2 py-3 text-center text-gray-500">{idx + 1}</td><td className="px-2 py-3 flex items-center gap-2"><img src={item.thumbnail} className="w-8 h-8 rounded-full shadow-sm"/><div><div className="font-bold">{item.name}</div><div className="text-gray-500 text-[10px]">{item.handle}</div></div></td><td className="px-2 py-3 text-center text-gray-600">{item.date}</td><td className="px-2 py-3 text-center font-bold text-gray-700">{item.sub} <span className="text-green-600 text-[10px]">({item.subGrowth})</span></td><td className="px-2 py-3 text-center font-bold text-blue-600">{item.views}</td><td className="px-2 py-3 text-center"><button onClick={() => onSpyChannel(item.id)} className="bg-blue-600 text-white text-[9px] font-bold px-3 py-1.5 rounded mr-1">SPY</button><button onClick={() => setTrackedChannels(prev => prev.filter(c => c.id !== item.id))} className="bg-red-500 text-white text-[9px] font-bold px-3 py-1.5 rounded"><Trash2 className="w-3 h-3"/></button></td></tr>
+                   {externalTrackList.map((item, idx) => (
+                     <tr key={item.id} className="hover:bg-blue-50"><td className="px-2 py-3 text-center text-gray-500">{idx + 1}</td><td className="px-2 py-3 flex items-center gap-2"><img src={item.thumbnail} className="w-8 h-8 rounded-full shadow-sm"/><div><div className="font-bold">{item.name}</div><div className="text-gray-500 text-[10px]">{item.handle}</div></div></td><td className="px-2 py-3 text-center text-gray-600">{item.date}</td><td className="px-2 py-3 text-center font-bold text-gray-700">{item.sub} <span className="text-green-600 text-[10px]">({item.subGrowth})</span></td><td className="px-2 py-3 text-center font-bold text-blue-600">{item.views}</td><td className="px-2 py-3 text-center"><button onClick={() => onSpyChannel(item.id)} className="bg-blue-600 text-white text-[9px] font-bold px-3 py-1.5 rounded mr-1">SPY</button><button onClick={() => setExternalTrackList(prev => prev.filter(c => c.id !== item.id))} className="bg-red-500 text-white text-[9px] font-bold px-3 py-1.5 rounded"><Trash2 className="w-3 h-3"/></button></td></tr>
                    ))}
-                   {trackedChannels.length === 0 && (<tr><td colSpan="6" className="text-center py-8 text-gray-500 italic">Chưa có kênh nào.</td></tr>)}
+                   {externalTrackList.length === 0 && (<tr><td colSpan="6" className="text-center py-8 text-gray-500 italic">Chưa có kênh nào. Dán ID hoặc Link kênh đối thủ ở trên để bắt đầu theo dõi.</td></tr>)}
                  </tbody>
                </table>
              </div>
@@ -660,8 +1026,8 @@
       );
     };
 
-    const TabNicheResearch = ({ showToast, callYouTubeApi, ytKeysCount, onCheckVideo }) => {
-      const [keyword, setKeyword] = useState('Nấu ăn');
+    const TabNicheResearch = ({ showToast, callYouTubeApi, onCheckVideo }) => {
+      const [keyword, setKeyword] = useState('Tạo video bằng AI');
       const [region, setRegion] = useState('VN');
       const [timeFilter, setTimeFilter] = useState('month');
       const [maxResults, setMaxResults] = useState(20);
@@ -669,19 +1035,19 @@
       const [nicheData, setNicheData] = useState(null);
 
       const handleAnalyzeNiche = async () => {
-        if (ytKeysCount === 0) return showToast('Vui lòng cài đặt API Key!', 'error');
-        if (!keyword.trim()) return showToast('Vui lòng nhập ngách!', 'error');
+        if (!keyword.trim()) return showToast('Vui lòng nhập từ khóa ngách!', 'error');
         setIsAnalyzing(true);
         try {
           const timeDate = getTimeFilterDate(timeFilter);
           const timeQuery = timeDate ? `&publishedAfter=${encodeURIComponent(timeDate)}` : '';
           const regionQuery = region !== 'GLOBAL' ? `&regionCode=${region}` : '';
           
-          const searchData = await callYouTubeApi((key) => `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodeURIComponent(keyword)}${regionQuery}&maxResults=${maxResults}&order=viewCount${timeQuery}&key=${key}`);
+          const searchData = await callYouTubeApi(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodeURIComponent(keyword)}${regionQuery}&maxResults=${maxResults}&order=viewCount${timeQuery}`);
           
           if (searchData.items && searchData.items.length > 0) {
             const videoIds = searchData.items.map(item => item.id.videoId).join(',');
-            const statsData = await callYouTubeApi((key) => `https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet&id=${videoIds}&key=${key}`);
+            const statsData = await callYouTubeApi(`https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet&id=${videoIds}`);
+            
             let totalViews = 0;
             const topVideos = statsData.items.map(vid => {
                const views = parseInt(vid.statistics.viewCount || 0); totalViews += views;
@@ -698,9 +1064,9 @@
       return (
         <div className="flex flex-col md:flex-row h-[calc(100vh-130px)] bg-gray-100 animate-fade-in">
           <div className="w-full md:w-72 bg-[#1e293b] text-white flex flex-col h-full overflow-y-auto custom-scrollbar shadow-xl z-10 p-5">
-            <div className="flex items-center font-black text-lg mb-6"><Activity className="w-5 h-5 mr-2 text-blue-400" /> NICHE RESEARCH</div>
+            <div className="flex items-center font-black text-lg mb-6"><Activity className="w-5 h-5 mr-2 text-blue-400" /> TÌM NGÁCH YOUTUBE</div>
             <div className="space-y-5">
-              <div><label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Từ khóa / Ngách</label><input type="text" value={keyword} onChange={(e)=>setKeyword(e.target.value)} className="w-full bg-[#0f172a] border border-slate-700 rounded p-2 text-sm text-slate-200 focus:outline-none" /></div>
+              <div><label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Từ khóa / Ngách</label><input type="text" value={keyword} onChange={(e)=>setKeyword(e.target.value)} placeholder="Ví dụ: Nấu ăn, Camping..." className="w-full bg-[#0f172a] border border-slate-700 rounded p-2 text-sm text-slate-200 focus:outline-none placeholder-slate-500 placeholder:italic" /></div>
               <div className="grid grid-cols-2 gap-3">
                 <div><label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Quốc gia</label><select value={region} onChange={(e)=>setRegion(e.target.value)} className="w-full bg-[#0f172a] border border-slate-700 rounded p-2 text-sm text-slate-200"><option value="GLOBAL">Toàn cầu</option><option value="VN">Việt Nam</option><option value="US">Hoa Kỳ</option></select></div>
                 <div><label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Thời gian</label><select value={timeFilter} onChange={(e)=>setTimeFilter(e.target.value)} className="w-full bg-[#0f172a] border border-slate-700 rounded p-2 text-sm text-slate-200"><option value="all">Tất cả</option><option value="month">30 ngày qua</option><option value="year">1 năm qua</option></select></div>
@@ -734,25 +1100,23 @@
       );
     };
 
-    const TabKeywordExplorer = ({ showToast, callYouTubeApi, ytKeysCount }) => {
+    const TabKeywordExplorer = ({ showToast, callYouTubeApi }) => {
       const [keyword, setKeyword] = useState('');
       const [lang, setLang] = useState('en');
       const [isLoading, setIsLoading] = useState(false);
       const [results, setResults] = useState([]);
 
       const handleFindKeywords = async () => {
-        if (ytKeysCount === 0) return showToast('Vui lòng cài đặt API Key!', 'error');
         if (!keyword.trim()) return showToast('Vui lòng nhập từ khóa chủ đề!', 'error');
         
         setIsLoading(true);
         try {
           const regionMap = { 'en': 'US', 'vi': 'VN', 'ko': 'KR', 'ja': 'JP' };
-          const searchData = await callYouTubeApi((key) => `https://www.googleapis.com/youtube/v3/search?part=id&type=video&q=${encodeURIComponent(keyword)}&relevanceLanguage=${lang}&regionCode=${regionMap[lang] || 'US'}&maxResults=30&key=${key}`);
+          const searchData = await callYouTubeApi(`https://www.googleapis.com/youtube/v3/search?part=id&type=video&q=${encodeURIComponent(keyword)}&relevanceLanguage=${lang}&regionCode=${regionMap[lang] || 'US'}&maxResults=30`);
           
           if (searchData.items && searchData.items.length > 0) {
              const videoIds = searchData.items.map(i => i.id.videoId).join(',');
-             
-             const vidData = await callYouTubeApi((key) => `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoIds}&key=${key}`);
+             const vidData = await callYouTubeApi(`https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoIds}`);
              
              const tagData = {};
              vidData.items.forEach(v => {
@@ -778,7 +1142,7 @@
              .sort((a, b) => b.count - a.count);
              
              if (tagsArr.length === 0) {
-                 showToast('Chủ đề này các kênh ngoại không sử dụng nhiều tags mở rộng. Hãy thử từ khác.', 'warning');
+                 showToast('Chủ đề này không có nhiều tags mở rộng. Hãy thử từ khác.', 'warning');
                  setResults([]);
                  setIsLoading(false);
                  return;
@@ -798,7 +1162,7 @@
              });
              
              setResults(finalResults);
-             showToast('Đã quét thành công data TAGS từ top video ngoại!', 'success');
+             showToast('Đã quét thành công data TAGS từ top video!', 'success');
           } else {
              showToast('Không tìm thấy dữ liệu cho từ khóa này.', 'warning');
           }
@@ -812,7 +1176,7 @@
              <h2 className="text-xl font-bold text-gray-800 mb-2">TÌM KEY VIEW NGOẠI (LONG-TAIL KEYWORDS)</h2>
              <p className="text-xs text-gray-500 mb-6">Hệ thống sẽ quét và bóc tách <strong className="text-blue-600">thẻ Tags thực tế</strong> từ 30-50 video đang Top Trend tại nước ngoài để tìm ra các Long-tail Keyword giá trị nhất.</p>
              <div className="flex max-w-2xl mx-auto gap-3">
-               <input type="text" value={keyword} onChange={(e)=>setKeyword(e.target.value)} placeholder="Nhập chủ đề (VD: make money, camping, cooking...)" className="flex-1 border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500" />
+               <input type="text" value={keyword} onChange={(e)=>setKeyword(e.target.value)} placeholder="Ví dụ: make money, camping, cooking..." className="flex-1 border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 placeholder-gray-400 placeholder:italic" />
                <select value={lang} onChange={(e)=>setLang(e.target.value)} className="border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none bg-white">
                  <option value="en">🇺🇸 Tiếng Anh (Hoa Kỳ)</option>
                  <option value="vi">🇻🇳 Tiếng Việt</option>
@@ -832,7 +1196,7 @@
                  <button onClick={() => { fallbackCopyTextToClipboard(results.map(r=>r.kw).join('\n')); showToast('Đã copy danh sách từ khóa!', 'success'); }} className="bg-white/20 hover:bg-white/30 px-3 py-1 rounded text-xs font-bold transition">Copy Tất Cả</button>
                </div>
                <table className="w-full text-left text-sm">
-                 <thead className="bg-gray-50 border-b text-gray-700"><tr><th className="px-4 py-3">TỪ KHÓA MỞ RỘNG</th><th className="px-4 py-3 text-center">TIỀM NĂNG VIEWS</th><th className="px-4 py-3 text-center">XU HƯỚNG</th><th className="px-4 py-3 text-center">ĐỘ CẠNH TRANH</th></tr></thead>
+                 <thead className="bg-gray-50 border-b text-gray-700 font-bold"><tr><th className="px-4 py-3">TỪ KHÓA MỞ RỘNG</th><th className="px-4 py-3 text-center">TIỀM NĂNG VIEWS</th><th className="px-4 py-3 text-center">XU HƯỚNG</th><th className="px-4 py-3 text-center">ĐỘ CẠNH TRANH</th></tr></thead>
                  <tbody className="divide-y divide-gray-100">
                    {results.map((r, i) => (
                      <tr key={i} className="hover:bg-blue-50">
@@ -860,38 +1224,22 @@
 
       const generateSEO = async () => {
         if (!keyword.trim()) return showToast('Vui lòng nhập từ khóa!', 'error');
-        if (geminiKeysCount === 0) return showToast('Vui lòng vào Cài Đặt và nhập Google Gemini API Key để sử dụng tính năng này!', 'warning');
         
         setIsGenerating(true);
         try {
-            const prompt = `Bạn là một chuyên gia SEO YouTube và người sáng tạo nội dung xuất sắc với 10 năm kinh nghiệm.
-            Hãy viết nội dung cho video có chủ đề: "${keyword}" (Thể loại kênh: ${topic}).
-            Ngữ cảnh: Nếu từ khóa là tiếng lóng, từ ghép (VD: baby cute short), hãy tự hiểu nó là video YouTube Shorts về em bé dễ thương.
+            const prompt = `Phân tích chuyên sâu từ khóa: "${keyword}" (Thể loại: ${topic}).`;
+            const resData = await callGeminiApi(prompt, keyword, topic);
             
-            Yêu cầu:
-            - Văn phong phải cực kỳ tự nhiên, lôi cuốn người xem, không được giống văn mẫu hay máy móc.
-            - Tiêu đề phải tò mò, giật tít, thu hút click ngay lập tức.
-            - Mô tả cần có cảm xúc, chứa các câu kêu gọi hành động (Call to action) tinh tế.
+            let textObj = resData.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (!textObj) throw new Error("Không nhận được phản hồi từ Gemini AI.");
             
-            TRẢ VỀ KẾT QUẢ DƯỚI DẠNG CHUẨN JSON (Không dùng Markdown):
-            {
-                "titles": ["5 tiêu đề video giật tít, có chứa icon cảm xúc phù hợp, độ dài 50-80 ký tự"],
-                "desc": "Mô tả video chi tiết khoảng 4 đoạn: Mở bài hấp dẫn, nội dung chính, kêu gọi hành động Subscribe/Like, và cuối cùng là liên kết mạng xã hội giả định. Phải có cảm xúc.",
-                "tags": ["15 thẻ tags (từ khóa SEO) liên quan nhất, trộn lẫn từ ngắn và dài"],
-                "prompt": "Viết 1 prompt tiếng Anh chi tiết để vẽ ảnh Thumbnail đẹp bằng AI (Midjourney/DALL-E) mô tả nội dung video này",
-                "plan": ["Kế hoạch 7 ngày làm 7 video liên tiếp theo để nuôi kênh chủ đề này (ghi rõ ý tưởng tiêu đề mỗi ngày)"]
-            }`;
-            
-            const resData = await callGeminiApi(prompt);
-            let textObj = resData.candidates[0].content.parts[0].text;
             textObj = textObj.replace(/```json/g, '').replace(/```/g, '').trim();
-            
             const parsedData = JSON.parse(textObj);
+
             setData(parsedData);
-            showToast('Tạo AI SEO thành công bằng sức mạnh của Gemini!', 'success');
-                
+            showToast('Gemini AI đã tự duy và sáng tạo xong nội dung SEO!', 'success');
         } catch(e) {
-            showToast(e.message, 'error');
+            showToast(`Lỗi Gemini AI: ${e.message}`, 'error');
         }
         setIsGenerating(false);
       };
@@ -901,13 +1249,13 @@
            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow-sm text-center">
              <h2 className="text-xl font-bold text-gray-800 mb-2 flex justify-center items-center">
                <Sparkles className="w-5 h-5 mr-2 text-orange-500"/> 
-               TOOL AI SEO YOUTUBE CHUYÊN NGHIỆP
+               TOOL AI SEO YOUTUBE CHUYÊN NGHIỆP (GEMINI 3 FLASH)
              </h2>
              <p className="text-xs text-gray-500 mb-6">
-                Yêu cầu <strong className="text-orange-500">Gemini API Key</strong>. AI sẽ phân tích ngữ cảnh, cảm xúc và tự động viết nội dung cuốn hút như một chuyên gia thực thụ.
+                Được điều khiển bởi <strong className="text-orange-500">Google Gemini AI</strong>. AI sẽ đọc kỹ ngữ cảnh, tự duy sáng tạo tiêu đề giật tít, mô tả chi tiết, bộ tag và lộ trình nội dung 7 ngày riêng biệt cho từng từ khóa.
              </p>
              <div className="flex max-w-2xl mx-auto gap-3">
-               <input type="text" value={keyword} onChange={(e)=>setKeyword(e.target.value)} placeholder="Nhập từ khóa chính (VD: baby cute short, vlog du lịch đà lạt...)" className="flex-1 border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:border-orange-500" />
+               <input type="text" value={keyword} onChange={(e)=>setKeyword(e.target.value)} placeholder="Ví dụ: review bàn phím cơ, baby cute..." className="flex-1 border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:border-orange-500 placeholder-gray-400 placeholder:italic" />
                <select value={topic} onChange={(e)=>setTopic(e.target.value)} className="border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none bg-white">
                  <option>Kênh Giải Trí</option>
                  <option>Kênh Kiến Thức</option>
@@ -924,39 +1272,40 @@
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in">
                 <div className="space-y-4">
                   <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
-                    <h3 className="font-bold text-sm text-gray-800 mb-3 flex items-center"><FileText className="w-4 h-4 mr-2 text-blue-500"/> 5 TIÊU ĐỀ CHUẨN SEO & GIẬT TÍT</h3>
+                    <h3 className="font-bold text-sm text-gray-800 mb-3 flex items-center"><FileText className="w-4 h-4 mr-2 text-blue-500"/> 5 TIÊU ĐỀ CHUẨN SEO & GIẬT TÍT (AI TƯ DUY)</h3>
                     <ul className="space-y-2">
-                      {data.titles.map((t, i) => (
-                        <li key={i} className="text-xs font-semibold text-gray-700 bg-gray-50 p-2 rounded border border-gray-100 hover:border-blue-300 flex justify-between group">
-                          {t} <button onClick={()=>{fallbackCopyTextToClipboard(t); showToast('Copy thành công');}} className="text-blue-500 opacity-0 group-hover:opacity-100"><Copy className="w-3.5 h-3.5"/></button>
+                      {data.titles && data.titles.map((t, i) => (
+                        <li key={i} className="text-xs font-semibold text-gray-700 bg-gray-50 p-2.5 rounded border border-gray-100 hover:border-blue-300 flex justify-between group">
+                          <span>{t}</span> 
+                          <button onClick={()=>{fallbackCopyTextToClipboard(t); showToast('Copy tiêu đề thành công');}} className="text-blue-500 opacity-0 group-hover:opacity-100 ml-2"><Copy className="w-3.5 h-3.5"/></button>
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
-                    <h3 className="font-bold text-sm text-gray-800 mb-3 flex items-center"><Tag className="w-4 h-4 mr-2 text-purple-500"/> BỘ 10+ TỪ KHÓA (TAGS) KÉO TRAFFIC</h3>
+                    <h3 className="font-bold text-sm text-gray-800 mb-3 flex items-center"><Tag className="w-4 h-4 mr-2 text-purple-500"/> BỘ THẺ TAGS SEO KÉO TRAFFIC</h3>
                     <div className="flex flex-wrap gap-2">
-                      {data.tags.map((t, i) => <span key={i} className="bg-purple-50 text-purple-700 border border-purple-200 px-2 py-1 rounded text-xs font-semibold">{t}</span>)}
+                      {data.tags && data.tags.map((t, i) => <span key={i} className="bg-purple-50 text-purple-700 border border-purple-200 px-2 py-1 rounded text-xs font-semibold">{t}</span>)}
                     </div>
                   </div>
                   <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
-                    <h3 className="font-bold text-sm text-gray-800 mb-3 flex items-center"><Image className="w-4 h-4 mr-2 text-pink-500"/> Ý TƯỞNG PROMPT TẠO THUMBNAIL BẰNG AI</h3>
-                    <div className="bg-gray-900 text-green-400 p-3 rounded font-mono text-xs">{data.prompt}</div>
+                    <h3 className="font-bold text-sm text-gray-800 mb-3 flex items-center"><Image className="w-4 h-4 mr-2 text-pink-500"/> PROMPT TIẾNG ANH VẼ THUMBNAIL (MIDJOURNEY/DALL-E)</h3>
+                    <div className="bg-gray-900 text-green-400 p-3 rounded font-mono text-xs whitespace-pre-wrap">{data.prompt}</div>
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
                     <div className="flex justify-between items-center mb-3">
-                      <h3 className="font-bold text-sm text-gray-800 flex items-center"><List className="w-4 h-4 mr-2 text-green-500"/> MÔ TẢ VIDEO CHUẨN CẤU TRÚC</h3>
+                      <h3 className="font-bold text-sm text-gray-800 flex items-center"><List className="w-4 h-4 mr-2 text-green-500"/> MÔ TẢ VIDEO LÔI CUỐN</h3>
                       <button onClick={()=>{fallbackCopyTextToClipboard(data.desc); showToast('Copy mô tả thành công');}} className="text-xs font-bold text-blue-600 hover:text-blue-800">Copy</button>
                     </div>
-                    <div className="bg-gray-50 p-3 rounded border text-xs text-gray-700 h-40 overflow-y-auto whitespace-pre-wrap font-mono custom-scrollbar">{data.desc}</div>
+                    <div className="bg-gray-50 p-3 rounded border text-xs text-gray-700 h-44 overflow-y-auto whitespace-pre-wrap font-mono custom-scrollbar">{data.desc}</div>
                   </div>
                   <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
-                    <h3 className="font-bold text-sm text-gray-800 mb-3 flex items-center"><Calendar className="w-4 h-4 mr-2 text-orange-500"/> KẾ HOẠCH NỘI DUNG 7 NGÀY</h3>
-                    <div className="space-y-2 border-l-2 border-orange-200 pl-4">
-                       {data.plan.map((p, i) => (
+                    <h3 className="font-bold text-sm text-gray-800 mb-3 flex items-center"><Calendar className="w-4 h-4 mr-2 text-orange-500"/> KẾ HOẠCH NỘI DUNG 7 NGÀY NUÔI KÊNH</h3>
+                    <div className="space-y-2.5 border-l-2 border-orange-200 pl-4">
+                       {data.plan && data.plan.map((p, i) => (
                          <div key={i} className="relative">
                            <div className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-orange-400"></div>
                            <div className="text-xs font-bold text-gray-800">{p}</div>
@@ -971,13 +1320,12 @@
       );
     };
 
-    const TabChannelAudit = ({ showToast, callYouTubeApi, ytKeysCount }) => {
+    const TabChannelAudit = ({ showToast, callYouTubeApi }) => {
       const [channelUrl, setChannelUrl] = useState('');
       const [isLoading, setIsLoading] = useState(false);
       const [auditData, setAuditData] = useState(null);
 
       const handleAudit = async () => {
-        if (ytKeysCount === 0) return showToast('Vui lòng cài đặt API Key!', 'error');
         if (!channelUrl.trim()) return showToast('Vui lòng nhập Link Kênh!', 'error');
         
         setIsLoading(true);
@@ -988,10 +1336,8 @@
         }
 
         try {
-          const data = await callYouTubeApi((key) => finalId.startsWith('@') 
-            ? `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,brandingSettings&forHandle=${encodeURIComponent(finalId)}&key=${key}` 
-            : `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,brandingSettings&id=${finalId}&key=${key}`
-          );
+          const fetchUrl = finalId.startsWith('@') ? `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,brandingSettings&forHandle=${encodeURIComponent(finalId)}` : `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,brandingSettings&id=${finalId}`;
+          const data = await callYouTubeApi(fetchUrl);
 
           if (data.items && data.items.length > 0) {
              const ch = data.items[0];
@@ -1080,34 +1426,25 @@
     function App() {
       const [activeTab, setActiveTab] = useState('tab1');
       const [toast, setToast] = useState({ message: '', type: 'success', visible: false });
-      
-      const DEFAULT_YT_KEYS = [
-        "AIzaSyDWDw5ssdhESFUhlpJUAznrGmGNw4Uk2U4",
-        "AIzaSyAKRZoOQlM2t9VDTWO5XWHBRM-ihdgcG0A",
-        "AIzaSyA7PKEqOHIRVYELLYjDkircCxXLss2YJ1o",
-        "AIzaSyCPXy-DVyFXc2gdIiAAD38U82v3xy9lQXQ"
-      ];
 
-      const DEFAULT_GEMINI_KEYS = [
-        "AQ.Ab8RN6KDhwHfckMbIGQ0PkhopetIaIbdmnFfMWTpJy3sjfFBHw",
-        "AQ.Ab8RN6K3ThEVRpaM5BzNDXa6FVW_f43OLQLHs430k1AzmB04RQ"
-      ];
-
-      const [ytKeysText, setYtKeysText] = useState(() => {
-        const saved = localStorage.getItem('yt_api_keys_list');
-        return saved !== null ? saved : DEFAULT_YT_KEYS.join('\n');
+      // API Keys state
+      const [ytKeysList, setYtKeysList] = useState(() => {
+        const saved = localStorage.getItem('yt_keys_list');
+        return saved ? JSON.parse(saved) : DEFAULT_YOUTUBE_KEYS;
       });
-
-      const [geminiKeysText, setGeminiKeysText] = useState(() => {
-        const saved = localStorage.getItem('gemini_api_keys_list');
-        return saved !== null ? saved : DEFAULT_GEMINI_KEYS.join('\n');
-      });
-
       const [ytActiveIdx, setYtActiveIdx] = useState(0);
+
+      const [geminiKeysList, setGeminiKeysList] = useState(() => {
+        const saved = localStorage.getItem('gemini_keys_list');
+        return saved ? JSON.parse(saved) : DEFAULT_GEMINI_KEYS;
+      });
       const [geminiActiveIdx, setGeminiActiveIdx] = useState(0);
-      
+
+      const [ytKeysInputText, setYtKeysInputText] = useState('');
+      const [geminiKeysInputText, setGeminiKeysInputText] = useState('');
+
       const [showSettings, setShowSettings] = useState(false);
-      
+      const [showHistoryModal, setShowHistoryModal] = useState(false);
       const [showUpgradeModal, setShowUpgradeModal] = useState(false);
       const [userPlan, setUserPlan] = useState(() => localStorage.getItem('user_plan') || 'FREE');
       
@@ -1116,116 +1453,178 @@
         return saved !== null ? Number(saved) : 3;
       });
 
+      // API Quota tracking
+      const [sessionQuota, setSessionQuota] = useState(0);
+      const [todayTotalQuota, setTodayTotalQuota] = useState(() => {
+        const saved = localStorage.getItem('today_total_quota');
+        return saved ? Number(saved) : 1217;
+      });
+
+      // Search History Log
+      const [searchHistory, setSearchHistory] = useState(() => {
+        const saved = localStorage.getItem('search_history_logs');
+        return saved ? JSON.parse(saved) : [
+          { time: '12:15 - 20/08/2026', kw: 'Tạo video bằng AI', channels: 10, units: 1217 }
+        ];
+      });
+
+      const addQuotaUnits = (units) => {
+        setSessionQuota(prev => prev + units);
+        setTodayTotalQuota(prev => {
+          const nextVal = prev + units;
+          localStorage.setItem('today_total_quota', String(nextVal));
+          return nextVal;
+        });
+      };
+
       const [checkoutStep, setCheckoutStep] = useState(1);
-      const [selectedPlanToBuy, setSelectedPlanToBuy] = useState('PRO');
+      const [selectedPlanToBuy, setSelectedPlanToBuy] = useState('');
       const [paymentStatus, setPaymentStatus] = useState('idle');
       const [orderCode, setOrderCode] = useState('');
 
       const [spyTargetId, setSpyTargetId] = useState('');
       const [checkVideoTargetId, setCheckVideoTargetId] = useState('');
 
+      const [trackedChannelsList, setTrackedChannelsList] = useState(() => {
+        const saved = localStorage.getItem('tracked_channels_data');
+        return saved ? JSON.parse(saved) : [];
+      });
+
+      useEffect(() => {
+        localStorage.setItem('tracked_channels_data', JSON.stringify(trackedChannelsList));
+      }, [trackedChannelsList]);
+
+      useEffect(() => {
+        setYtKeysInputText(ytKeysList.join('\n'));
+      }, [ytKeysList]);
+
+      useEffect(() => {
+        setGeminiKeysInputText(geminiKeysList.join('\n'));
+      }, [geminiKeysList]);
+
       const showToast = (message, type = 'success') => {
         setToast({ message, type, visible: true });
         setTimeout(() => setToast((prev) => ({ ...prev, visible: false })), 3500);
       };
 
-      const getParsedKeys = (text) => {
-        if (!text) return [];
-        return text.split(/[\n,]+/).map(k => k.trim()).filter(k => k.length > 0);
-      };
-
-      const ytKeysList = getParsedKeys(ytKeysText);
-      const geminiKeysList = getParsedKeys(geminiKeysText);
-
-      const callYouTubeApi = async (urlBuilder) => {
-        if (ytKeysList.length === 0) throw new Error("Chưa có YouTube API Key nào được cài đặt!");
-
+      const callYouTubeApi = async (baseUrl) => {
+        const keysToTry = ytKeysList.length > 0 ? ytKeysList : [""];
         let currentIdx = ytActiveIdx;
-        for (let attempt = 0; attempt < ytKeysList.length; attempt++) {
-          const idx = (currentIdx + attempt) % ytKeysList.length;
-          const key = ytKeysList[idx];
-          const url = urlBuilder(key);
+        let lastError = null;
+
+        for (let attempt = 0; attempt < keysToTry.length; attempt++) {
+          const idx = (currentIdx + attempt) % keysToTry.length;
+          const key = keysToTry[idx];
+          const fullUrl = baseUrl.includes('?') ? `${baseUrl}&key=${key}` : `${baseUrl}?key=${key}`;
 
           try {
-            const res = await fetch(url);
+            const res = await fetch(fullUrl);
             const data = await res.json();
 
             if (data.error) {
-              const msg = data.error.message || '';
-              const isQuota = res.status === 403 || res.status === 429 || 
-                              msg.toLowerCase().includes('quota') || 
-                              data.error.errors?.some(e => e.reason?.includes('quota') || e.reason?.includes('rateLimitExceeded'));
-
-              if (isQuota && ytKeysList.length > 1) {
-                console.warn(`YouTube Key #${idx + 1} hết quota. Đang chuyển key tiếp theo...`);
-                showToast(`Mã YouTube #${idx + 1} hết Quota! Tự động chuyển sang mã dự phòng #${((idx + 1) % ytKeysList.length) + 1}`, 'warning');
-                setYtActiveIdx((idx + 1) % ytKeysList.length);
-                continue;
-              }
-              throw new Error(msg || 'Lỗi API YouTube');
+              lastError = new Error(data.error.message || 'Lỗi API YouTube');
+              continue;
             }
 
             setYtActiveIdx(idx);
             return data;
           } catch (err) {
-            if (err.message.toLowerCase().includes('quota') && ytKeysList.length > 1 && attempt < ytKeysList.length - 1) {
-              setYtActiveIdx((idx + 1) % ytKeysList.length);
-              continue;
-            }
-            throw err;
+            lastError = err;
           }
         }
-        throw new Error("Tất cả các mã YouTube API Key của bạn đều đã hết Quota!");
+
+        throw lastError || new Error("Tất cả các API Key YouTube đã bị hết Quota hoặc không khả dụng!");
       };
 
-      const callGeminiApi = async (prompt) => {
-        if (geminiKeysList.length === 0) throw new Error("Chưa có Gemini API Key nào được cài đặt!");
-
+      const callGeminiApi = async (prompt, keyword = "", topic = "") => {
+        const keysToTry = geminiKeysList.length > 0 ? [...geminiKeysList, ""] : [""];
         let currentIdx = geminiActiveIdx;
-        for (let attempt = 0; attempt < geminiKeysList.length; attempt++) {
-          const idx = (currentIdx + attempt) % geminiKeysList.length;
-          const key = geminiKeysList[idx];
+        let lastError = null;
+
+        for (let attempt = 0; attempt < keysToTry.length; attempt++) {
+          const idx = (currentIdx + attempt) % keysToTry.length;
+          const key = keysToTry[idx];
 
           try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${key}`, {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${key}`;
+            const payload = {
+              contents: [{ parts: [{ text: `Phân tích chuyên sâu từ khóa "${keyword || prompt}" (Thể loại kênh: ${topic || 'Giải trí'}).` }] }],
+              systemInstruction: {
+                parts: [{
+                  text: `Bạn là một chuyên gia tư duy chiến lược SEO YouTube & Content Creator hàng đầu thế giới.
+Hãy đọc kỹ từ khóa và thể loại kênh để TỰ DUY BẰNG TRÍ TUỆ NHÂN TẠO (AI), tạo ra nội dung hoàn toàn mới, cực kỳ độc đáo, chạm đúng cảm xúc và tâm lý người xem.
+
+YÊU CẦU ĐẦU RA (JSON):
+1. titles: 5 tiêu đề đánh trúng sự tò mò/cảm xúc.
+2. desc: Bài mô tả dài 3-4 đoạn lôi cuốn.
+3. tags: 15 thẻ tags chuẩn SEO.
+4. prompt: Prompt tiếng Anh chi tiết vẽ ảnh Thumbnail.
+5. plan: Kế hoạch 7 ngày với 7 ý tưởng video nối tiếp.
+
+Trả về DUY NHẤT một đối tượng JSON chuẩn:
+{
+  "titles": ["5 tiêu đề"],
+  "desc": "Đoạn văn mô tả",
+  "tags": ["15 tag SEO"],
+  "prompt": "Prompt thumbnail",
+  "plan": ["7 ngày kế hoạch"]
+}`
+                }]
+              },
+              generationConfig: {
+                responseMimeType: "application/json"
+              }
+            };
+
+            const res = await fetch(url, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+              body: JSON.stringify(payload)
             });
+
             const data = await res.json();
 
             if (data.error) {
-              const msg = data.error.message || '';
-              const isQuota = res.status === 429 || res.status === 403 || 
-                              msg.toLowerCase().includes('quota') || 
-                              msg.toLowerCase().includes('resource_exhausted');
-
-              if (isQuota && geminiKeysList.length > 1) {
-                showToast(`Mã Gemini #${idx + 1} hết Quota! Tự động chuyển sang mã dự phòng #${((idx + 1) % geminiKeysList.length) + 1}`, 'warning');
-                setGeminiActiveIdx((idx + 1) % geminiKeysList.length);
-                continue;
-              }
-              throw new Error(msg || 'Lỗi API Gemini');
-            }
-
-            setGeminiActiveIdx(idx);
-            return data;
-          } catch (err) {
-            if (err.message.toLowerCase().includes('quota') && geminiKeysList.length > 1 && attempt < geminiKeysList.length - 1) {
-              setGeminiActiveIdx((idx + 1) % geminiKeysList.length);
+              lastError = new Error(data.error.message || 'Lỗi API');
               continue;
             }
-            throw err;
+
+            if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+              setGeminiActiveIdx(idx);
+              return data;
+            }
+          } catch (err) {
+            lastError = err;
           }
         }
-        throw new Error("Tất cả mã Gemini API Key của bạn đều đã hết Quota/Rate Limit!");
+
+        throw lastError || new Error("Không thể kết nối đến Gemini AI.");
       };
 
-      const handleSaveKeys = () => {
-        localStorage.setItem('yt_api_keys_list', ytKeysText);
-        localStorage.setItem('gemini_api_keys_list', geminiKeysText);
+      const saveApiKeysSettings = () => {
+        const newYtList = ytKeysInputText.split('\n').map(k => k.trim()).filter(Boolean);
+        const newGeminiList = geminiKeysInputText.split('\n').map(k => k.trim()).filter(Boolean);
+
+        setYtKeysList(newYtList);
+        localStorage.setItem('yt_keys_list', JSON.stringify(newYtList));
+
+        setGeminiKeysList(newGeminiList);
+        localStorage.setItem('gemini_keys_list', JSON.stringify(newGeminiList));
+
         setShowSettings(false);
-        showToast('Đã ghi nhớ và cập nhật hệ thống API Key thành công!', 'success');
+        showToast('Đã lưu danh sách API Key thành công!', 'success');
+      };
+
+      const restoreDefaultKeys = () => {
+        setYtKeysList(DEFAULT_YOUTUBE_KEYS);
+        localStorage.setItem('yt_keys_list', JSON.stringify(DEFAULT_YOUTUBE_KEYS));
+        setYtKeysInputText(DEFAULT_YOUTUBE_KEYS.join('\n'));
+
+        setGeminiKeysList(DEFAULT_GEMINI_KEYS);
+        localStorage.setItem('gemini_keys_list', JSON.stringify(DEFAULT_GEMINI_KEYS));
+        setGeminiKeysInputText(DEFAULT_GEMINI_KEYS.join('\n'));
+
+        showToast('Đã khôi phục toàn bộ Key mặc định!', 'success');
       };
 
       const useFreeSearch = () => {
@@ -1240,12 +1639,30 @@
       const navigateToSpy = (channelId) => { setSpyTargetId(channelId); setActiveTab('tab2'); };
       const navigateToCheckVideo = (videoId) => { setCheckVideoTargetId(videoId); setActiveTab('tab3'); };
 
+      const handleAddAllToTracking = (channelsToAdd) => {
+        setTrackedChannelsList(prev => {
+          const existingIds = new Set(prev.map(c => c.id));
+          const filteredNew = channelsToAdd.filter(c => !existingIds.has(c.id)).map(c => ({
+            id: c.id,
+            name: c.name,
+            handle: c.handle,
+            sub: c.sub,
+            subGrowth: '+0',
+            views: c.views,
+            date: new Date().toLocaleDateString('vi-VN'),
+            status: 'Đang theo dõi',
+            thumbnail: c.thumbnail
+          }));
+          return [...filteredNew, ...prev];
+        });
+      };
+
       const tabs = [
-        { id: 'tab1', label: 'TÌM KÊNH & NGÁCH', icon: Search, isLocked: false },
-        { id: 'tab2', label: 'SPY ĐỐI THỦ', icon: BarChart2, isLocked: false },
-        { id: 'tab3', label: 'KIỂM TRA VIDEO', icon: LinkIcon, isLocked: false },
-        { id: 'tab4', label: 'TRACKING KÊNH', icon: Target, isLocked: false },
-        { id: 'tab5', label: 'NGHIÊN CỨU NGÁCH', icon: LayoutGrid, isLocked: userPlan === 'FREE' },
+        { id: 'tab1', label: 'TÌM KÊNH & ĐÁNH GIÁ TỪ KHÓA', icon: Search, isLocked: false },
+        { id: 'tab2', label: 'PHÂN TÍCH KÊNH ĐỐI THỦ (SPY)', icon: BarChart2, isLocked: false },
+        { id: 'tab3', label: 'KIỂM TRA LINK VIDEO', icon: LinkIcon, isLocked: false },
+        { id: 'tab4', label: 'THEO DÕI ĐỐI THỦ (TRACKING)', icon: Target, isLocked: false },
+        { id: 'tab5', label: 'TÌM NGÁCH YOUTUBE', icon: LayoutGrid, isLocked: false },
         { id: 'tab6', label: 'TÌM KEY VIEW NGOẠI', icon: KeyIcon, isLocked: userPlan === 'FREE' },
         { id: 'tab7', label: 'AI SEO & KẾ HOẠCH', icon: Sparkles, isLocked: userPlan === 'FREE' },
         { id: 'tab8', label: 'AUDIT KÊNH', icon: ShieldCheck, isLocked: userPlan === 'FREE' },
@@ -1285,15 +1702,23 @@
           setTimeout(() => {
             setShowUpgradeModal(false);
             setCheckoutStep(1);
-          }, 2000);
-        }, 3000);
+          }, 1800);
+        }, 2000);
       };
 
       return (
         <div className="min-h-screen bg-white text-gray-800 font-sans flex flex-col">
-          <Header onOpenSettings={() => setShowSettings(true)} onOpenUpgrade={openUpgradeModal} userPlan={userPlan} freeSearchesLeft={freeSearchesLeft} activeYtKeyCount={ytKeysList.length} activeGeminiKeyCount={geminiKeysList.length} />
+          <Header 
+            onOpenSettings={() => setShowSettings(true)} 
+            onOpenUpgrade={openUpgradeModal} 
+            onOpenHistory={() => setShowHistoryModal(true)}
+            userPlan={userPlan} 
+            freeSearchesLeft={freeSearchesLeft}
+            activeYtKeyCount={ytKeysList.length}
+            activeGeminiKeyCount={geminiKeysList.length}
+          />
           
-          <div className="bg-gray-100 border-b border-gray-200 px-4 pt-3 flex space-x-1 overflow-x-auto custom-scrollbar shadow-inner">
+          <div className="bg-gray-200 border-b border-gray-300 px-3 pt-2 flex space-x-1 overflow-x-auto custom-scrollbar shadow-inner">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
               const Icon = tab.icon;
@@ -1301,13 +1726,13 @@
                 <button
                   key={tab.id}
                   onClick={() => handleTabClick(tab)}
-                  className={`flex items-center px-4 py-2.5 rounded-t-lg text-[11px] font-bold transition-colors whitespace-nowrap border-t border-l border-r relative ${
-                    isActive ? 'bg-blue-600 text-white border-blue-700 shadow-[0_-2px_5px_rgba(0,0,0,0.1)]' : 'bg-gray-200 text-gray-600 border-gray-300 hover:bg-gray-300'
+                  className={`flex items-center px-3.5 py-2 rounded-t-lg text-[11px] font-extrabold transition-colors whitespace-nowrap border-t border-l border-r relative ${
+                    isActive ? 'bg-blue-600 text-white border-blue-700 shadow-md' : 'bg-gray-300/80 text-gray-700 border-gray-400 hover:bg-gray-300'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 mr-2 ${isActive ? 'text-blue-100' : 'text-gray-500'}`} />
+                  <Icon className={`w-3.5 h-3.5 mr-1.5 ${isActive ? 'text-white' : 'text-gray-600'}`} />
                   {tab.label}
-                  {tab.isLocked && <Lock className="w-3 h-3 ml-2 text-orange-500" />}
+                  {tab.isLocked && <Lock className="w-3 h-3 ml-1.5 text-orange-500" />}
                 </button>
               );
             })}
@@ -1315,27 +1740,45 @@
 
           <main className="flex-1 overflow-hidden relative bg-gray-50">
             <div style={{ display: activeTab === 'tab1' ? 'block' : 'none', height: '100%' }}>
-              <TabFindChannels showToast={showToast} callYouTubeApi={callYouTubeApi} ytKeysCount={ytKeysList.length} onOpenSettings={() => setShowSettings(true)} onSpyChannel={navigateToSpy} onCheckVideo={navigateToCheckVideo} userPlan={userPlan} onOpenUpgrade={openUpgradeModal} freeSearchesLeft={freeSearchesLeft} useFreeSearch={useFreeSearch} />
+              <TabFindChannels 
+                showToast={showToast} 
+                callYouTubeApi={callYouTubeApi} 
+                callGeminiApi={callGeminiApi}
+                ytKeysCount={ytKeysList.length} 
+                geminiKeysCount={geminiKeysList.length}
+                onOpenSettings={() => setShowSettings(true)} 
+                onOpenHistory={() => setShowHistoryModal(true)}
+                onSpyChannel={navigateToSpy} 
+                onCheckVideo={navigateToCheckVideo} 
+                onAddAllToTracking={handleAddAllToTracking}
+                userPlan={userPlan} 
+                onOpenUpgrade={openUpgradeModal} 
+                freeSearchesLeft={freeSearchesLeft} 
+                useFreeSearch={useFreeSearch}
+                addQuotaUnits={addQuotaUnits}
+                sessionQuota={sessionQuota}
+                todayTotalQuota={todayTotalQuota}
+              />
             </div>
             
             <div style={{ display: activeTab === 'tab2' ? 'block' : 'none', height: '100%' }}>
-              <TabSpyChannel showToast={showToast} callYouTubeApi={callYouTubeApi} ytKeysCount={ytKeysList.length} externalChannelId={spyTargetId} onAnalyzeVideo={navigateToCheckVideo} />
+              <TabSpyChannel showToast={showToast} callYouTubeApi={callYouTubeApi} externalChannelId={spyTargetId} onAnalyzeVideo={navigateToCheckVideo} />
             </div>
             
             <div style={{ display: activeTab === 'tab3' ? 'block' : 'none', height: '100%' }}>
-              <TabCheckVideo showToast={showToast} callYouTubeApi={callYouTubeApi} ytKeysCount={ytKeysList.length} initialVideoId={checkVideoTargetId} onSpyChannel={navigateToSpy} />
+              <TabCheckVideo showToast={showToast} callYouTubeApi={callYouTubeApi} initialVideoId={checkVideoTargetId} />
             </div>
             
             <div style={{ display: activeTab === 'tab4' ? 'block' : 'none', height: '100%' }}>
-              <TabTracking showToast={showToast} callYouTubeApi={callYouTubeApi} ytKeysCount={ytKeysList.length} onSpyChannel={navigateToSpy} />
+              <TabTracking showToast={showToast} callYouTubeApi={callYouTubeApi} onSpyChannel={navigateToSpy} externalTrackList={trackedChannelsList} setExternalTrackList={setTrackedChannelsList} />
             </div>
             
             <div style={{ display: activeTab === 'tab5' ? 'block' : 'none', height: '100%' }}>
-              <TabNicheResearch showToast={showToast} callYouTubeApi={callYouTubeApi} ytKeysCount={ytKeysList.length} onCheckVideo={navigateToCheckVideo} />
+              <TabNicheResearch showToast={showToast} callYouTubeApi={callYouTubeApi} onCheckVideo={navigateToCheckVideo} />
             </div>
             
             <div style={{ display: activeTab === 'tab6' ? 'block' : 'none', height: '100%' }}>
-              <TabKeywordExplorer showToast={showToast} callYouTubeApi={callYouTubeApi} ytKeysCount={ytKeysList.length} />
+              <TabKeywordExplorer showToast={showToast} callYouTubeApi={callYouTubeApi} />
             </div>
             
             <div style={{ display: activeTab === 'tab7' ? 'block' : 'none', height: '100%' }}>
@@ -1343,43 +1786,66 @@
             </div>
             
             <div style={{ display: activeTab === 'tab8' ? 'block' : 'none', height: '100%' }}>
-              <TabChannelAudit showToast={showToast} callYouTubeApi={callYouTubeApi} ytKeysCount={ytKeysList.length} />
+              <TabChannelAudit showToast={showToast} callYouTubeApi={callYouTubeApi} />
             </div>
           </main>
 
-          {/* Modal Nâng Cấp Gói */}
+          {/* Modal History Log */}
+          {showHistoryModal && (
+            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[110] backdrop-blur-sm animate-fade-in p-4">
+              <div className="bg-white p-6 rounded-xl w-full max-w-xl shadow-2xl relative">
+                <button onClick={() => setShowHistoryModal(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-800"><X className="w-5 h-5" /></button>
+                <h3 className="font-bold text-lg text-gray-800 mb-3 flex items-center gap-2"><History className="w-5 h-5 text-blue-600"/> Lịch Sử Quét & Quota API</h3>
+                <div className="overflow-x-auto max-h-72 custom-scrollbar">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-gray-100 font-bold border-b">
+                      <tr><th className="p-2">THỜI GIAN</th><th className="p-2">TỪ KHÓA</th><th className="p-2 text-center">KÊNH</th><th className="p-2 text-right">QUOTA UNIT</th></tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {searchHistory.map((log, i) => (
+                        <tr key={i}><td className="p-2 text-gray-500">{log.time}</td><td className="p-2 font-bold text-blue-700">{log.kw}</td><td className="p-2 text-center">{log.channels}</td><td className="p-2 text-right font-bold text-orange-600">{log.units} units</td></tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="mt-4 pt-3 border-t text-right">
+                  <button onClick={() => setShowHistoryModal(false)} className="bg-gray-200 text-gray-800 font-bold px-4 py-1.5 rounded text-xs">ĐÓNG</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Modal Upgrade */}
           {showUpgradeModal && (
             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[110] backdrop-blur-sm animate-fade-in p-4">
-              <div className="bg-white p-2 rounded-2xl w-full max-w-3xl shadow-2xl relative overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar">
-                <button onClick={() => setShowUpgradeModal(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-800 z-10 p-1 rounded-full hover:bg-gray-100"><X className="w-6 h-6" /></button>
+              <div className="bg-white p-2 rounded-2xl w-full max-w-3xl shadow-2xl relative overflow-hidden">
+                <button onClick={() => setShowUpgradeModal(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-800 z-10"><X className="w-6 h-6" /></button>
                 
                 {checkoutStep === 1 && (
                   <div className="p-6 md:p-8">
                     <div className="text-center mb-8">
                        <h3 className="font-extrabold text-2xl text-gray-800 flex items-center justify-center gap-2"><Crown className="text-orange-500 w-8 h-8"/> NÂNG CẤP GÓI DỊCH VỤ CHUYÊN NGHIỆP</h3>
-                       <p className="text-sm text-gray-500 mt-2">Mở khóa toàn bộ 8 công cụ (Tìm Kênh, Spy, Tracking, Niche, Key Ngoại, AI SEO, Audit Kênh).</p>
+                       <p className="text-sm text-gray-500 mt-2">Mở khóa toàn bộ 8 công cụ chuyên sâu dành cho Youtuber Pro.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                        <div className={`p-4 rounded-xl border-2 flex flex-col justify-between ${userPlan === 'FREE' ? 'border-blue-500 bg-blue-50/20' : 'border-gray-200'}`}>
                           <div>
-                            <div className="font-bold text-gray-800 text-sm">Gói Miễn Phí</div>
-                            <div className="text-lg font-black text-blue-600 my-1">0đ</div>
-                            <ul className="text-xs text-gray-600 space-y-2 mt-3"><li>• Tối đa 15-20 kết quả quét</li><li>• Dùng thử 3 lần tìm kiếm</li><li>• Chỉ dùng 4 Tab cơ bản</li></ul>
+                            <div className="font-bold text-gray-800 text-sm">Gói Miễn Phí</div><div className="text-lg font-black text-blue-600 my-1">0đ</div>
+                            <ul className="text-xs text-gray-600 space-y-2 mt-3"><li>• Tối đa 15-20 kết quả quét</li><li>• Dùng thử 3 lần tìm kiếm</li><li>• Chỉ dùng 5 Tab cơ bản</li></ul>
                           </div>
-                          <div className="mt-4 text-center"><span className="text-[10px] font-bold text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full uppercase tracking-wider">{userPlan === 'FREE' ? 'Đang sử dụng' : 'Dùng thử'}</span></div>
+                          <div className="mt-4 text-center"><span className="text-[10px] font-bold text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full uppercase tracking-wider">Đang sử dụng</span></div>
                        </div>
                        <div className={`p-5 rounded-xl border-2 shadow-lg flex flex-col justify-between ${userPlan === 'PRO' ? 'border-orange-500 bg-orange-50/20' : 'border-orange-200 bg-orange-50/10'}`}>
                           <div>
                             <div className="flex justify-between items-center"><span className="font-bold text-orange-600 text-sm">Chuyên Nghiệp</span><span className="bg-orange-500 text-white text-[9px] font-bold px-2 py-1 rounded">PHỔ BIẾN</span></div>
-                            <div className="text-2xl font-black text-orange-600 my-2">299.000đ<span className="text-xs text-gray-500 font-normal">/tháng</span></div>
+                            <div className="text-2xl font-black text-orange-600 my-2">299k<span className="text-xs text-gray-500 font-normal">/tháng</span></div>
                             <ul className="text-xs text-gray-600 space-y-2 mt-3 font-medium"><li>• Quét tới 200 kết quả</li><li>• Không giới hạn lượt tìm</li><li>• Mở khóa Tab AI SEO & Key Ngoại</li></ul>
                           </div>
                           <button onClick={() => handleStartPurchase('PRO')} className="mt-6 w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold py-2.5 rounded-lg shadow-md transition-all transform hover:scale-105">NÂNG CẤP PRO</button>
                        </div>
                        <div className={`p-5 rounded-xl border-2 flex flex-col justify-between ${userPlan === 'VIP' ? 'border-purple-500 bg-purple-50/20' : 'border-purple-200 bg-purple-50/10'}`}>
                           <div>
-                            <div className="font-bold text-purple-700 text-sm">Doanh Nghiệp / VIP</div>
-                            <div className="text-2xl font-black text-purple-600 my-2">699.000đ<span className="text-xs text-gray-500 font-normal">/tháng</span></div>
+                            <div className="font-bold text-purple-700 text-sm">Doanh Nghiệp / VIP</div><div className="text-2xl font-black text-purple-600 my-2">699k<span className="text-xs text-gray-500 font-normal">/tháng</span></div>
                             <ul className="text-xs text-gray-600 space-y-2 mt-3 font-medium"><li>• Quét không giới hạn (Unlimited)</li><li>• Tự động xoay từ khóa API</li><li>• Audit & Tool VIP A-Z</li></ul>
                           </div>
                           <button onClick={() => handleStartPurchase('VIP')} className="mt-6 w-full bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-2.5 rounded-lg shadow-md transition-all">NÂNG CẤP VIP</button>
@@ -1422,7 +1888,7 @@
                              </div>
                              <div className="flex justify-between border-b border-gray-100 pb-3 mb-3">
                                <span className="text-gray-500">Số tiền:</span>
-                               <span className="font-bold text-blue-600 text-lg">{PLAN_PRICES[selectedPlanToBuy]?.toLocaleString('vi-VN')} VNĐ</span>
+                               <span className="font-bold text-blue-600 text-lg">{PLAN_PRICES[selectedPlanToBuy].toLocaleString()} VNĐ</span>
                              </div>
                              <div className="flex flex-col pt-1">
                                <span className="text-gray-500 mb-1">Nội dung chuyển khoản (Bắt buộc):</span>
@@ -1445,7 +1911,7 @@
                           {paymentStatus === 'checking' && (
                             <div className="w-full max-w-md mx-auto flex items-center justify-center py-4 bg-gray-200 text-gray-700 rounded-xl font-bold text-sm">
                               <RefreshCw className="w-5 h-5 mr-2 animate-spin text-blue-600" />
-                              Hệ thống đang kiểm tra giao dịch (Vui lòng đợi 3-5s)...
+                              Hệ thống đang kiểm tra giao dịch (Vui lòng đợi 2s)...
                             </div>
                           )}
 
@@ -1463,42 +1929,53 @@
             </div>
           )}
 
-          {/* Modal Cài Đặt */}
+          {/* Settings API Modal */}
           {showSettings && (
             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] backdrop-blur-sm animate-fade-in p-4">
               <div className="bg-white p-6 rounded-xl w-full max-w-lg shadow-2xl relative">
                 <button onClick={() => setShowSettings(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-800"><X className="w-5 h-5" /></button>
-                <h3 className="font-bold text-xl text-gray-800 mb-2 flex items-center gap-2"><Settings className="w-5 h-5"/> Quản Lý & Tự Động Xoay API Key</h3>
+                <h3 className="font-bold text-xl text-gray-800 mb-2 flex items-center gap-2"><Settings className="w-5 h-5 text-blue-600"/> Quản Lý & Tự Động Xoay API Key</h3>
                 <p className="text-xs text-gray-500 mb-4">Mỗi mã xuống 1 dòng. Hệ thống sẽ tự động lưu và chuyển sang mã dự phòng khi bị hết Quota.</p>
                 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1 flex justify-between">
-                      <span>YouTube Data API V3 Keys ({ytKeysList.length} mã)</span>
-                      <span className="text-blue-600 font-mono">Key đang dùng: #{ytActiveIdx + 1}</span>
-                    </label>
+                    <div className="flex justify-between items-center mb-1">
+                      <label className="text-xs font-bold text-gray-700">YouTube Data API V3 Keys ({ytKeysList.length} mã)</label>
+                      <span className="text-[10px] text-blue-600 font-semibold">Key đang dùng: #{ytActiveIdx + 1}</span>
+                    </div>
                     <textarea 
-                      rows="4"
-                      value={ytKeysText} 
-                      onChange={(e) => setYtKeysText(e.target.value)} 
-                      placeholder="Dán các mã AIzaSy... (Mỗi mã 1 dòng)" 
-                      className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none font-mono text-xs custom-scrollbar" 
+                      rows={3} 
+                      value={ytKeysInputText} 
+                      onChange={(e) => setYtKeysInputText(e.target.value)} 
+                      placeholder="Dán mã API YouTube tại đây (mỗi mã 1 dòng)..." 
+                      className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none font-mono text-xs custom-scrollbar"
                     />
                   </div>
-                  <div className="border-t border-gray-100 pt-3">
-                    <label className="text-xs font-bold text-gray-700 mb-1 flex justify-between">
-                       <span className="flex items-center"><Sparkles className="w-3.5 h-3.5 mr-1 text-orange-500"/> Google Gemini API Keys ({geminiKeysList.length} mã)</span>
-                       <span className="text-orange-600 font-mono">Key đang dùng: #{geminiActiveIdx + 1}</span>
-                    </label>
+
+                  <div>
+                    <div className="flex justify-between items-center mb-1">
+                      <label className="text-xs font-bold text-gray-700 flex items-center">
+                        <Sparkles className="w-3.5 h-3.5 mr-1 text-orange-500"/> Google Gemini API Keys ({geminiKeysList.length} mã)
+                      </label>
+                      <span className="text-[10px] text-orange-600 font-semibold">Key đang dùng: #{geminiActiveIdx + 1}</span>
+                    </div>
                     <textarea 
-                      rows="3"
-                      value={geminiKeysText} 
-                      onChange={(e) => setGeminiKeysText(e.target.value)} 
-                      placeholder="Dán các mã API Gemini... (Mỗi mã 1 dòng)" 
-                      className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-orange-500 outline-none font-mono text-xs custom-scrollbar" 
+                      rows={4} 
+                      value={geminiKeysInputText} 
+                      onChange={(e) => setGeminiKeysInputText(e.target.value)} 
+                      placeholder="Dán mã API Gemini tại đây (mỗi mã 1 dòng)..." 
+                      className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-orange-500 outline-none font-mono text-xs custom-scrollbar"
                     />
                   </div>
-                  <button onClick={handleSaveKeys} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg transition-colors mt-2 text-sm shadow">Lưu Cấu Hình & Ghi Nhớ</button>
+
+                  <div className="flex gap-2 pt-2">
+                    <button onClick={restoreDefaultKeys} className="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-lg text-xs transition-colors">
+                      Khôi Phục Mặc Định
+                    </button>
+                    <button onClick={saveApiKeysSettings} className="w-2/3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg text-xs transition-colors shadow">
+                      Lưu Cấu Hình & Ghi Nhớ
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
