@@ -20,6 +20,26 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+  <!-- Firebase Cloud Sync Integration -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'youtube-niche-pro-default';
+    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+      apiKey: "demo-key", authDomain: "demo.firebaseapp.com", projectId: "demo-proj"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.FirebaseCloud = {
+      auth, db, appId, doc, setDoc, onSnapshot, signInAnonymously, signInWithCustomToken
+    };
+  </script>
+
   <style>
     body { font-family: 'Inter', sans-serif; }
     .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -1834,6 +1854,8 @@ Trả về DUY NHẤT định dạng JSON: {"keywords": ["ngách 1", "ngách 2",
       const [activeTab, setActiveTab] = useState(() => localStorage.getItem('app_active_tab') || 'tab2');
       const [toast, setToast] = useState({ message: '', type: 'success', visible: false });
 
+      const [cloudReady, setCloudReady] = useState(false);
+
       useEffect(() => {
         localStorage.setItem('app_active_tab', activeTab);
       }, [activeTab]);
@@ -1882,8 +1904,55 @@ Trả về DUY NHẤT định dạng JSON: {"keywords": ["ngách 1", "ngách 2",
         return saved ? JSON.parse(saved) : [];
       });
 
-      useEffect(() => { localStorage.setItem('tracked_channels_data', JSON.stringify(trackedChannelsList)); }, [trackedChannelsList]);
-      
+      useEffect(() => {
+        const initCloud = async () => {
+          if (!window.FirebaseCloud) return;
+          const { auth, signInAnonymously, signInWithCustomToken, db, appId, doc, onSnapshot } = window.FirebaseCloud;
+          try {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+              await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+              await signInAnonymously(auth);
+            }
+            setCloudReady(true);
+
+            // Listen to real-time cloud updates for tracked channels across all devices
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'tracking_data', 'shared_channels');
+            const unsubscribe = onSnapshot(docRef, (snapshot) => {
+              if (snapshot.exists()) {
+                const cloudData = snapshot.data();
+                if (cloudData && Array.isArray(cloudData.list)) {
+                  setTrackedChannelsList(cloudData.list);
+                  localStorage.setItem('tracked_channels_data', JSON.stringify(cloudData.list));
+                }
+              }
+            }, (error) => {
+              console.error("Cloud sync error:", error);
+            });
+
+            return () => unsubscribe();
+          } catch (err) {
+            console.error("Cloud auth failed:", err);
+          }
+        };
+        initCloud();
+      }, []);
+
+      const updateTrackedChannelsCloud = async (newList) => {
+        setTrackedChannelsList(newList);
+        localStorage.setItem('tracked_channels_data', JSON.stringify(newList));
+
+        if (window.FirebaseCloud && window.FirebaseCloud.auth?.currentUser) {
+          try {
+            const { db, appId, doc, setDoc } = window.FirebaseCloud;
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'tracking_data', 'shared_channels');
+            await setDoc(docRef, { list: newList, updatedAt: new Date().toISOString() });
+          } catch (e) {
+            console.error("Cloud save failed:", e);
+          }
+        }
+      };
+
       const [checkoutStep, setCheckoutStep] = useState(1);
       const [selectedPlanToBuy, setSelectedPlanToBuy] = useState('');
       const [paymentStatus, setPaymentStatus] = useState('idle');
@@ -1994,13 +2063,12 @@ Trả về DUY NHẤT định dạng JSON: {"keywords": ["ngách 1", "ngách 2",
       };
 
       const handleAddAllToTracking = (channelsToAdd) => {
-        setTrackedChannelsList(prev => {
-          const existingIds = new Set(prev.map(c => c.id));
-          const newEntries = channelsToAdd.filter(c => !existingIds.has(c.id)).map(c => ({
-            id: c.id, name: c.name, handle: c.handle, sub: c.sub, subGrowth: '+0', views: c.views, date: new Date().toLocaleDateString('vi-VN'), status: 'Đang theo dõi', thumbnail: c.thumbnail
-          }));
-          return [...newEntries, ...prev];
-        });
+        const existingIds = new Set(trackedChannelsList.map(c => c.id));
+        const newEntries = channelsToAdd.filter(c => !existingIds.has(c.id)).map(c => ({
+          id: c.id, name: c.name, handle: c.handle, sub: c.sub, subGrowth: '+0', views: c.views, date: new Date().toLocaleDateString('vi-VN'), status: 'Đang theo dõi', thumbnail: c.thumbnail
+        }));
+        const updatedList = [...newEntries, ...trackedChannelsList];
+        updateTrackedChannelsCloud(updatedList);
       };
 
       const navigateToSpy = (channelId) => { setSpyTargetId(channelId); setActiveTab('tab3'); };
@@ -2081,7 +2149,7 @@ Trả về DUY NHẤT định dạng JSON: {"keywords": ["ngách 1", "ngách 2",
               <TabCheckVideo showToast={showToast} callYouTubeApi={callYouTubeApi} initialVideoId={checkVideoTargetId} onSpyChannel={navigateToSpy} />
             </div>
             <div style={{ display: activeTab === 'tab6' ? 'block' : 'none', height: '100%' }}>
-              <TabTracking showToast={showToast} callYouTubeApi={callYouTubeApi} onSpyChannel={navigateToSpy} externalTrackList={trackedChannelsList} setExternalTrackList={setTrackedChannelsList} />
+              <TabTracking showToast={showToast} callYouTubeApi={callYouTubeApi} onSpyChannel={navigateToSpy} externalTrackList={trackedChannelsList} setExternalTrackList={updateTrackedChannelsCloud} />
             </div>
             <div style={{ display: activeTab === 'tab7' ? 'block' : 'none', height: '100%' }}>
               <TabNicheResearch showToast={showToast} callYouTubeApi={callYouTubeApi} onCheckVideo={navigateToCheckVideo} />
