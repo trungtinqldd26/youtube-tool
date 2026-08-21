@@ -78,6 +78,26 @@
     const Crown = ({ className = "w-4 h-4", ...p }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...p}><polygon points="2 4 11 9 12 2 13 9 22 4 20 22 4 22 2 4"/></svg>;
     const Lock = ({ className = "w-4 h-4", ...p }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...p}><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>;
 
+    // Formatted Input Component for Thousands Separator
+    const FormattedNumberInput = ({ value, onChange, className, placeholder }) => {
+      const displayVal = (value !== undefined && value !== null && value !== '') 
+        ? Number(value).toLocaleString('vi-VN') 
+        : '';
+      const handleChange = (e) => {
+        const rawDigits = e.target.value.replace(/\D/g, '');
+        onChange(rawDigits === '' ? '' : Number(rawDigits));
+      };
+      return (
+        <input
+          type="text"
+          value={displayVal}
+          onChange={handleChange}
+          className={className}
+          placeholder={placeholder}
+        />
+      );
+    };
+
     // API Keys Default Configs
     const DEFAULT_YOUTUBE_KEYS = [
       "AIzaSyDWDw5ssdhESFUhlpJUAznrGmGNw4Uk2U4",
@@ -176,7 +196,6 @@
       return Math.min(100, Math.max(0, score));
     };
 
-    // Mô hình chấm điểm Outlier Score liên tục & linh hoạt
     const calculateOutlierScore = (views, subs, videos, ageDays) => {
       const rawSubs = Math.max(1, subs);
       const rawViews = Math.max(0, views);
@@ -245,7 +264,6 @@
       return Math.max(1, days);
     };
 
-    // Thuật toán bóc tách tên Ngách độc bản từ Tiêu đề Video thật
     const extractSubNicheFromTitle = (title, searchKw) => {
       if (!title) return searchKw;
       let cleanTitle = title
@@ -359,7 +377,6 @@
         localStorage.setItem('find_aikeywords', JSON.stringify(aiKeywords)); localStorage.setItem('find_statusmsg', statusMsg);
       }, [keyword, region, timeRange, minSubs, maxSubs, maxResults, minVideos, maxVideos, minViews, autoRotateKw, isHuntSmall, isOutlierScoreRank, hasSearched, channels, aiKeywords, statusMsg]);
 
-      // Dự phòng Neo Từ Khóa Gốc
       const generateAnchorProtectedFallbackKeywords = (baseKw) => {
         const cleanBase = baseKw.trim();
         const modifiers = [
@@ -402,7 +419,6 @@
           let collectedChannels = [];
           let unitsUsedThisSearch = 0;
 
-          // THUẬT TOÁN AI SEMANTIC MATRIX ÉP NGUYÊN TẮC "NEO TỪ KHÓA GỐC"
           let final20Keywords = [];
           try {
             const countryStr = COUNTRY_NAME_MAP[region] || region;
@@ -517,14 +533,11 @@ Trả về DUY NHẤT định dạng JSON: {"keywords": ["ngách 1", "ngách 2",
                     };
                   });
 
-                  // LOGIC LỌC KÊNH LINH HOẠT THEO CÁC OPTION
                   const filteredBatch = formatted.filter(c => {
                     if (isHuntSmall) {
-                       // CÁCH 1: Lọc cứng Deep Drill cho Săn Kênh Nhỏ / Mới Trend
                        return c.rawSubs <= 50000 && (c.age <= 30 || (c.rawViews / Math.max(1, c.rawSubs)) >= 5) && c.rawViews >= minViews;
                     }
                     if (isOutlierScoreRank) {
-                       // CÁCH 2: Lọc theo biên người dùng nhập, ưu tiên các kênh có tỷ lệ viral cao
                        return c.rawSubs >= minSubs && c.rawSubs <= maxSubs && c.rawViews >= minViews;
                     }
                     return c.rawSubs >= minSubs && c.rawSubs <= maxSubs && c.rawVideos >= minVideos && c.rawVideos <= maxVideos && c.rawViews >= minViews;
@@ -542,7 +555,6 @@ Trả về DUY NHẤT định dạng JSON: {"keywords": ["ngách 1", "ngách 2",
             if (!autoRotateKw) break;
           }
 
-          // SẮP XẾP KẾT QUẢ THEO MÔ HÌNH CHỌN
           collectedChannels.sort((a, b) => {
             const ratioA = a.rawViews / (a.rawSubs || 1);
             const ratioB = b.rawViews / (b.rawSubs || 1);
@@ -598,15 +610,33 @@ Trả về DUY NHẤT định dạng JSON: {"keywords": ["ngách 1", "ngách 2",
               </div>
 
               <div className="md:col-span-3 space-y-2.5">
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Đăng ký tối thiểu:</label><input type="number" value={minSubs} onChange={(e)=>setMinSubs(Number(e.target.value))} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 no-spinner font-medium" /></div>
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Đăng ký tối đa:</label><input type="number" value={maxSubs} onChange={(e)=>setMaxSubs(Number(e.target.value))} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 no-spinner font-medium" /></div>
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Số lượng quét:</label><input type="number" value={maxResults} onChange={(e)=>setMaxResults(Number(e.target.value))} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 no-spinner font-medium" /></div>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-gray-700 w-28">Đăng ký tối thiểu:</label>
+                  <FormattedNumberInput value={minSubs} onChange={setMinSubs} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 font-medium text-right" />
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-gray-700 w-28">Đăng ký tối đa:</label>
+                  <FormattedNumberInput value={maxSubs} onChange={setMaxSubs} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 font-medium text-right" />
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-gray-700 w-28">Số lượng quét:</label>
+                  <FormattedNumberInput value={maxResults} onChange={setMaxResults} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 font-medium text-right" />
+                </div>
               </div>
 
               <div className="md:col-span-3 space-y-2.5">
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Video tối thiểu:</label><input type="number" value={minVideos} onChange={(e)=>setMinVideos(Number(e.target.value))} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 no-spinner font-medium" /></div>
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Video tối đa:</label><input type="number" value={maxVideos} onChange={(e)=>setMaxVideos(Number(e.target.value))} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 no-spinner font-medium" /></div>
-                <div className="flex items-center justify-between"><label className="text-xs font-semibold text-gray-700 w-28">Lượt xem tối thiểu:</label><input type="number" value={minViews} onChange={(e)=>setMinViews(Number(e.target.value))} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 no-spinner font-medium" /></div>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-gray-700 w-28">Video tối thiểu:</label>
+                  <FormattedNumberInput value={minVideos} onChange={setMinVideos} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 font-medium text-right" />
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-gray-700 w-28">Video tối đa:</label>
+                  <FormattedNumberInput value={maxVideos} onChange={setMaxVideos} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 font-medium text-right" />
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-gray-700 w-28">Lượt xem tối thiểu:</label>
+                  <FormattedNumberInput value={minViews} onChange={setMinViews} className="w-28 border border-gray-300 rounded px-2.5 py-1 text-sm focus:outline-none focus:border-blue-500 font-medium text-right" />
+                </div>
               </div>
 
               <div className="md:col-span-3">
@@ -628,7 +658,6 @@ Trả về DUY NHẤT định dạng JSON: {"keywords": ["ngách 1", "ngách 2",
 
             <div className="mt-4 flex flex-col md:flex-row items-end justify-between border-t border-gray-100 pt-3 gap-3">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 w-full md:w-auto">
-                {/* TÍCH CHỌN 1: TỰ ĐỘNG CHUYỂN TỪ KHÓA */}
                 <div className="flex items-start bg-orange-50/60 p-2 rounded border border-orange-200">
                   <input type="checkbox" checked={autoRotateKw} onChange={(e)=>setAutoRotateKw(e.target.checked)} className="mt-0.5 w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500 cursor-pointer" />
                   <div className="ml-2">
@@ -637,7 +666,6 @@ Trả về DUY NHẤT định dạng JSON: {"keywords": ["ngách 1", "ngách 2",
                   </div>
                 </div>
 
-                {/* TÍCH CHỌN 2: SĂN KÊNH NHỎ / MỚI TREND (CẮT CỨNG) */}
                 <div className="flex items-start bg-blue-50/60 p-2 rounded border border-blue-200">
                   <input type="checkbox" checked={isHuntSmall} onChange={(e) => setIsHuntSmall(e.target.checked)} className="mt-0.5 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer" />
                   <div className="ml-2">
@@ -646,7 +674,6 @@ Trả về DUY NHẤT định dạng JSON: {"keywords": ["ngách 1", "ngách 2",
                   </div>
                 </div>
 
-                {/* TÍCH CHỌN 3: SĂN KÊNH OUTLIER ĐỘT BIẾN (CHẤM ĐIỂM MỀM - TÙY CHỌN MỚI) */}
                 <div className="flex items-start bg-purple-50/60 p-2 rounded border border-purple-200">
                   <input type="checkbox" checked={isOutlierScoreRank} onChange={(e) => setIsOutlierScoreRank(e.target.checked)} className="mt-0.5 w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500 cursor-pointer" />
                   <div className="ml-2">
@@ -2096,6 +2123,13 @@ Trả về DUY NHẤT định dạng JSON: {"keywords": ["ngách 1", "ngách 2",
                             <ul className="text-xs text-gray-600 space-y-2 mt-3 font-medium"><li>• Quét tới 200 kết quả</li><li>• Không giới hạn lượt tìm</li><li>• Mở khóa tất cả 10 Tab</li></ul>
                           </div>
                           <button onClick={() => handleStartPurchase('PRO')} className="mt-6 w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold py-2.5 rounded-lg shadow-md transition-all transform hover:scale-105">NÂNG CẤP PRO</button>
+                       </div>
+                       <div className={`p-5 rounded-xl border-2 flex flex-col justify-between ${userPlan === 'VIP' ? 'border-purple-500 bg-purple-50/20' : 'border-purple-200 bg-purple-50/10'}`}>
+                          <div>
+                            <div className="font-bold text-purple-700 text-sm">Doanh Nghiệp / VIP</div><div className="text-2xl font-black text-purple-600 my-2">699k<span className="text-xs text-gray-500 font-normal">/tháng</span></div>
+                            <ul className="text-xs text-gray-600 space-y-2 mt-3 font-medium"><li>• Quét không giới hạn (Unlimited)</li><li>• Tự động xoay từ khóa API</li><li>• Hỗ trợ 1:1 VIP & Tool A-Z</li></ul>
+                          </div>
+                          <button onClick={() => handleStartPurchase('VIP')} className="mt-6 w-full bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-2.5 rounded-lg shadow-md transition-all">NÂNG CẤP VIP</button>
                        </div>
                     </div>
                   </div>
